@@ -1,0 +1,21 @@
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Hastie et~al.(2009)Hastie, Tibshirani, Friedman, Hastie, Friedman, and
+  Tibshirani]{hastie2009elements}
+Trevor Hastie, Robert Tibshirani, Jerome Friedman, T~Hastie, J~Friedman, and
+  R~Tibshirani.
+\newblock \emph{The elements of statistical learning}, volume~2.
+\newblock Springer, 2009.
+
+\bibitem[Lange et~al.(2000)Lange, Hunter, and Yang]{lange2000optimization}
+Kenneth Lange, David~R Hunter, and Ilsoon Yang.
+\newblock Optimization transfer using surrogate objective functions.
+\newblock \emph{Journal of computational and graphical statistics}, 9\penalty0
+  (1):\penalty0 1--20, 2000.
+
+\end{thebibliography}

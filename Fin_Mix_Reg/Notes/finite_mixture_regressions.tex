@@ -1,0 +1,247 @@
+\documentclass{article}
+
+\listfiles
+
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% PACKAGES
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\usepackage{a4wide}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{verbatim}
+\usepackage{mathrsfs}
+\usepackage[round]{natbib}
+\usepackage{mciteplus}
+\usepackage[leqno]{amsmath}
+\usepackage{amssymb}\usepackage{booktabs}
+\usepackage{wasysym}
+\pagestyle{plain}
+\usepackage{setspace}
+\usepackage[margin=1in]{geometry}
+\usepackage[running, left]{lineno}
+\usepackage{afterpage}
+\usepackage{titlesec}
+\usepackage{epsfig}
+\usepackage{rotating}
+\usepackage{appendix}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{courier}
+\usepackage{graphicx}
+\usepackage[labelsep=space,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{wasysym}
+\usepackage[superscript,biblabel]{cite}
+\usepackage{float}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage{authblk}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{lscape}
+\usepackage{marvosym}
+
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% NEW COMMANDS
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 		% Horizontal rule
+\newcommand{\bx}{{\bf{x}}}                                                 % Bold font x
+\newcommand{\bbeta}{{\boldsymbol \beta}}                        % Bold font x                       
+\newcommand{\bPsi}{\boldsymbol \Psi}                              % Bold Psi
+\newcommand{\bphi}{\boldsymbol \phi}                              % Bold phi
+\newcommand{\bpi}{\boldsymbol \pi}                                  % Bold phi
+\newcommand{\bp}{{\bf p}}                                  % Bold phi
+
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% TITLE PAGE
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{University of Queensland} \\ [25pt]
+		\horrule{0.5pt} \\[0.4cm]
+		\huge GWAS in Admixed Populations via Variable Selection in Finite Mixture of Regression Models \\[0.6cm]
+		\horrule{2pt} \\[0.5cm]
+}
+
+\author[1,\Yinyang]{Luke Lloyd-Jones} 
+\author[1,\Yinyang]{Hien Nguyen}
+
+
+\affil[1]{Centre for Neurogenetics and Statistical Genomics, Queensland Brain Institute, University of Queensland, Brisbane, QLD} 
+\affil[2]{Mathematics and Physices, University of Queensland, St Lucia, Brisbane, QLD, AUS} 
+
+
+\date{Last updated \today}
+
+\begin{document}
+\maketitle
+\newpage
+
+
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% METHODS
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+% Model and method for variable selection
+
+\subsection*{Model and method for variable selection}
+
+Let $Y$ be a response phenotype of interest and let ${\bf{x}} = (x_1, x_2, \ldots, x_p)'$ be the vector of covariates believed to have an effect on $Y$. The finite mixture model is defined as follows:
+
+Let $\mathcal{G} = \{ f(y;\theta, \phi); (\theta, \phi) \in \Theta \times (0, \infty)\}$ be a family of parametric density functions of $Y$ with respect to a $\sigma$-finite measure $\nu$, where $\theta \subset R$ and $\phi$ is a dispersion parameter. We say that $({\bf x}, Y)$ follows a FMR model of order $K$ if the conditional density function $Y$ given $\bx$ has the form 
+  $$f(y; \bx, \boldsymbol \Psi) = \sum_{k = 1} ^ K \pi_k f(y; \theta_k(\bx), \phi_k)$$
+with $\theta_k(\bx) = h(\bx'\bbeta_k)$ (some mean function), $k = 1, 2, \ldots, K$, for a given link function $h(.)$, and for some 
+$\bPsi = (\bbeta_1, \bbeta_2, \ldots, \bbeta_k, \bphi, \bpi) $ with  $\bbeta_k = (\beta_{k1}, \beta_{k1}, \ldots, \beta_{kP})'$, $ \bphi = (\phi_1, \phi_2, \ldots, \phi_{K})'$ $\bpi = (\pi_1, \pi_2, \ldots, \pi_{K - 1})'$ such that $\pi_k > 0 $ and $\sum_{k = 1} ^ K \pi_k = 1$. 
+
+In the case where $\bx$  is random, we assume that its density $f(\bx)$ is functionally independent of the parameters in the FMR model. Thus the statistical inference can be done based purely on the conditional density.
+
+Let $(\bx_1, y_1), (\bx_2, y_2), \ldots, (\bx_n, y_n)$ ($i \in 1, \ldots, n$) be a sample of observations from the FMR model. The conditional log-likelihood function of $\bPsi$ is given by
+	$$ l_n(\bPsi) = \sum_{i = 1}^n \log \left\{ \sum_{k=1}^K \pi_k f(y_i; \theta_k( \bx_i ), \phi_k) \right\}. $$
+	
+When the effect of a component of $\bx$ is not significant the corresponding ordinary maximum likelihood estimate is often close to but not equal to zero. Thus this covariate is not excluded from the model. We define a penalised log-likelihood function as
+	$${\tilde l_n} ( \bPsi ) = l_n( \psi ) - \bp_n ( \bPsi )$$
+with the penalty function
+	$$ \bp_n ( \bPsi ) = \sum_{k=1}^K \pi_k \left \{ \sum_{j=1}^P p_{nk}( \beta_{kj} ) \right \}, $$
+where the $ p_{nk}( \beta_{kj} ) $ values are nonnegative and nondecreasing functions in $|\beta_{kj}|$. By maximising $ {\tilde l_n} ( \bPsi ) $ that contains a penalty, there is a positive chance of having some estimated values of $\beta$ that are equal to 0 and thus of selecting a model. In the penalty function we choose the penalty imposed by the regression coefficients within the $k$th component of the FMR model to be proportional to $\pi_k$. Similar to relating the penalty to the sample size. We will focus on the SCAD penalty, where we let $(.)_+$ be the positive part of a quantity
+	$$ p'_{nk} ( \beta ) = \gamma_{nk} \sqrt{n} I \{ \sqrt{n} |\beta| \leq \gamma_{nk} \} 
+	+ \frac{ \sqrt{n} ( a \gamma_{nk} - \sqrt{n}|\beta|)_+}{a - 1}I\{ \sqrt{n}|\beta| > \gamma_{nk} \}$$
+
+% Numerical solution
+
+\subsection*{Numerical solution}
+
+Let $(\bx_1, y_1), (\bx_2, y_2), \ldots, (\bx_n, y_n)$ be a random sample of observations from the FMR model. In the context of finite mixture models, the EM algorithm can be used. However, due to the condition that for all $n$ and $k$, $p_{nk}(0)=0$ and $p_{nk}(\beta)$ is symmetric, non-negative, non-decreasing and twice differentiable for all $\beta$ in $(0, \infty)$ with at most a few exceptions, which is essential for sparsity, the $p_{nk}(\beta)$'s are not differentiable at $\beta = 0$. The Newton-Raphson algorithm can not be used directly in the M step of the EM unless it is properly adapted to deal with the single non-smooth point at $\beta = 0$. To deal with this problem we can replace $p_{nk}(\beta)$ by a local quadratic approximation. 
+    $$p_{nk}(\beta) \approx p_{nk}(\beta_0) + \frac{p'_n(\beta_0)}{2\beta_0}(\beta^2-\beta_0^2),$$
+in a neighbourhood of $\beta_0$. This function increases to infinity whenever $|\beta|\rightarrow \infty$, which is more suitable for the application that the simple Taylor's expansion. We replace $ \bp_n ( \bPsi ) $ in the penalised log-likelihood function by the following function:
+    $${\tilde {\bp}_n}( \bPsi; \bPsi^{(m)}) = \sum_{k=1}^K\pi_k\sum_{j=1}^P\left \{ p_{nk}(\beta_{jk}^{(m)}) + \frac{p'_n(\beta_{jk}^{(m)})}     
+    {2\beta_{jk}^{(m)}} (\beta^2_{jk} - \beta^{(m)^2}_{jk})\right \}$$
+The revised EM algorithm is as follows: Let the complete log-likelihood function be 
+    $$l_n^c(\bPsi) = \sum_{i=1}^n\sum_{k=1}^Kz_{ik}[\log \pi_k + \log\{f(y_i;\theta_k(\bx_i),\phi_k)\}]$$
+where the $z_{ik}$s are indicator variables showing the component membership of the $i$th observation in the FMR model and are
+unobserved imaginary variables. The penalised complete log-likelihood function is then given by ${\tilde l}_n^c(\bPsi) = l_n^c( \bPsi ) - \bp_n(\bPsi)$. The EM algorithm maximises ${\tilde l}_n^c(\bPsi)$ in the following two steps:\\
+
+\noindent E step: The E step computes the conditional expectation of the function ${\tilde l}_n^c(\bPsi)$ with respect to $z_{ik}$, given the data $(\bx_1, y_1)$ and assuming that the current estimate $\bPsi^{(m)}$ gives the true parameters of the model. The conditional expectation is 
+    $$Q(\bPsi, \bPsi^{(m)}) = \sum_{i=1}^n\sum_{k=1}^Kw_{ik}^{(m)}\log\pi
+                                         + \sum_{i=1}^n\sum_{k=1}^Kw_{ik}^{(m)}\log\{f(y_i;\theta_k(\bx_i), \phi_k)\}
+                                         - \bp_n(\bPsi)$$
+where the weights
+    $$ w_{ik}^{(m)} = \frac{\pi_k^{(m)} f(y_i;\theta_k^{(m)}(\bx_i), \phi_k^{(m)})}
+                                {\sum_{l=1}^K\pi_l^{(m)} f(y_i;\theta_l^{(m)}(\bx_i), \phi_l^{(m)})} $$
+are the conditional expectation of the unobserved $z_{ik}$.\\
+
+\noindent M step: The M step on the $(m + 1)$th iteration maximises the function $Q(\bPsi, \bPsi^{(m)})$ with respect to $\bPsi^{(m)}$. In the usual EM algorithm, the mixing proportions are updated by 
+    $$\pi_k^{(m+1)} = \frac{1}{n}\sum_{i=1}^nw_{ik}^{(m)}$$
+which maximise the leading term of $Q(\bPsi, \bPsi^{(m)})$.
+
+Given this, we consider that the $\pi_k$ are constant in $Q(\bPsi, \bPsi^{(m)})$, and maximise $Q(\bPsi, \bPsi^{(m)})$ with respect to the other parameters in $\bPsi$. By replacing $\bp_n(\bPsi)$ by ${\tilde {\bp}_n}( \bPsi; \bPsi^{(m)})$ in $Q(\bPsi, \bPsi^{(m)})$, the regression coefficients are updated by solving
+    $$\sum_{i=1}^nw_{ik}^{(m)}\frac{\partial}{\partial \beta_{kj}} \{ \log f(y_i; \theta_k(\bx_i), \phi_k^{(m)})\} 
+        - \pi_k\frac{\partial}{\partial \beta_{kj}}{\tilde {p}_{nk}}(\beta_{kj}) $$
+where ${\tilde {p}_{nk}}(\beta_{kj})$ is the corresponding term in ${\tilde {\bp}_n}(\bPsi, \bPsi^{(m)})$, for $k = 1, 2, \ldots, K; j = 1, 2, \ldots, P$. The updated estimates $\phi_k^{(m+1)}$ of the dispersion parameters are obtained by solving
+    $$\sum_{i=1}^nw_{ik}^{(m)}\frac{\partial}{\partial \phi_{k}}\{\log f(y_i;\theta_k(\bx_i), \phi_k)\}  = 0$$
+\clearpage
+
+\subsection*{Algorithm components}
+
+To begin, we start with a simple mixture of two normals i.e., $k = 2$, variances unknown, and we will use the SCAD
+penalty function. Given this, we need to find the following quantities
+    $$ \frac{\partial}{\partial \beta_{kj}}\{ \log f(y_i; \bx_i'\bbeta_k, \sigma^2_k) \}$$
+where 
+    $$f(y_i; \bx_i' \bbeta_k, \sigma^2_k) = \frac{1} {\sqrt{2\pi\sigma_k^2} } 
+         \exp \left[  -\frac{(y_i - \sum_{j=1}^P x_{ij}\beta_{kj})^2} {2\sigma^2_k}                   \right ]$$
+    $$\log \{ f(y_i; \bx_i' \bbeta_k, \sigma^2_k) \} = -\frac{1}{2} \log(2\pi) - \frac{1}{2} \log(\sigma^2_k) -
+           \frac{1}{2}\frac{(y_i - \sum_{j=1}^P x_{ij}\beta_{kj})^2} {\sigma^2_k}                  $$      
+    $$\frac{\partial}{\partial \beta_{k{\bar j}}}\log \{ f(y_i; \bx_i' \bbeta_k, \sigma^2_k) \} = 
+          \frac{\partial}{\partial \beta_{k{\bar j}}}\left [ -\frac{1}{2} \log(2\pi) - \frac{1}{2} \log(\sigma^2_k) -
+           \frac{1}{2}\frac{(y_i - \sum_{j=1}^P x_{ij}\beta_{kj})^2} {\sigma^2_k}    \right ]             $$
+     $$ = \frac{(y_i - \sum_{j=1}^P x_{ij}\beta_{kj})} {\sigma^2_k} x_{i{\bar j}}              $$
+where ${\bar j}$ denotes the $j$th value that we are taking the derivative with respect to. We also need 
+     $$ \frac{\partial}{\partial \beta_{k{\bar j}}}{\tilde p_{nk}}(\beta_{kj})$$
+where 
+    $${\tilde p_{nk}}(\beta_{kj}) = \pi_k\sum_{j=1}^P\left \{ p_{nk}(\beta^{(m)}_{jk}) + 
+                                                   \frac{ p'_{nk}(\beta^{(m)}_{jk}) } { 2\beta_{jk}^{(m)} }(\beta_{jk}^2 
+                                                   -  \beta_{jk}^{(m)^2})  \right \}$$
+the $\beta^{(m)}_{jk}$ are treated as not dependent on $\beta_{jk}$ and thus 
+    $$ \frac{\partial}{\partial \beta_{k{\bar j}}}{\tilde p_{nk}}(\beta_{kj}) = 
+         \frac{ p'_{nk}(\beta^{(m)}_{{\bar j}k}) } { \beta_{{\bar j}k}^{(m)} }\beta_{{\bar j}k}\pi_k  $$
+We can now attempt to solve
+    $$ \sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}\frac{(y_i - \sum_{j=1}^P\beta_{kj}x_{ij})} {\sigma^2_k}    - 
+         \frac{ p'_{nk}(\beta^{(m)}_{{\bar j}k}) } { \beta_{{\bar j}k}^{(m)} }\beta_{{\bar j}k}\pi_k = 0$$
+for $\beta_{{\bar j}k}$. Express the first term as a split with the variable of interest
+    $$ \sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}\frac{(y_i - \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij} - 
+      \beta_{k{\bar j}}x_{i{\bar j}})}    
+      {\sigma^2_k}  - \frac{ p'_{nk}(\beta^{(m)}_{{\bar j}k}) } { \beta_{{\bar j}k}^{(m)} }\beta_{{\bar j}k}\pi_k = 0$$
+    $$ \frac{\sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}(y_i - 
+         \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij})} {\sigma^2_k} - 
+         \frac{\sum_{i=1}^nw_{ik}^{(m)}\beta_{k{\bar j}}x^2_{i{\bar j}}}    
+        {\sigma^2_k}  - \frac{ p'_{nk}(\beta^{(m)}_{{\bar j}k}) } { \beta_{{\bar j}k}^{(m)} }\beta_{{\bar j}k}\pi_k = 0$$
+    $$ \frac{\sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}(y_i - 
+         \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij})} {\sigma^2_k} = 
+         \beta_{{\bar j}k}\left[ \frac{\sum_{i=1}^nw_{ik}^{(m)}x^2_{i{\bar j}}}    
+        {\sigma^2_k}  + \frac{ p'_{nk}(\beta^{(m)}_{{\bar j}k}) } { \beta_{{\bar j}k}^{(m)} }\pi_k \right ]$$
+    $$ \frac{\sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}(y_i - 
+         \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij})} {\sigma^2_k} = 
+         \beta_{{\bar j}k}\left[  \frac{\beta_{{\bar j}k}^{(m)}\sum_{i=1}^nw_{ik}^{(m)}x^2_{i{\bar j}}}    
+        { \beta_{{\bar j}k}^{(m)}\sigma^2_k}  
+        + \frac{ \pi_k\sigma^2_kp'_{nk}(\beta^{(m)}_{{\bar j}k}) } {\sigma^2_k\beta_{{\bar j}k}^{(m)} } \right ]$$
+    $$ \frac{\sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}(y_i - 
+         \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij})} {\sigma^2_k} = 
+         \beta_{{\bar j}k}\left[  \frac{\beta_{{\bar j}k}^{(m)}\sum_{i=1}^nw_{ik}^{(m)}x^2_{i{\bar j}} + \pi_k      
+         \sigma^2_kp'_{nk}(\beta^{(m)}_{{\bar j}k}) } {\sigma^2_k\beta_{{\bar j}k}^{(m)} } \right ]$$
+    $$ \frac{\beta_{{\bar j}k}^{(m)}\sum_{i=1}^nw_{ik}^{(m)} x_{i{\bar j}}(y_i - 
+         \sum_{j\neq{\bar j}}^P\beta_{kj}x_{ij})} {\beta_{{\bar j}k}^{(m)}\sum_{i=1}^nw_{ik}^{(m)}x^2_{i{\bar j}} + \pi_k      
+         \sigma^2_kp'_{nk}(\beta^{(m)}_{{\bar j}k})} = 
+         \beta_{{\bar j}k} $$
+    
+\section{Variable selection using MM algorithms Hunter and Li}
+
+In the case of SCAD, Lasso, or bridge regression, the penalised log-likelihood is non differentiable; with SCAD or bridge regression the function is also non concave. They explore the connection with local quadratic approximation and MM algorithm.
+
+The penalty functions $p_j(.)$ and tuning parameters $\lambda_j$ are not necessarily the same for all $j$. They use the same penalisation for every component of $\bbeta$ and write $p_{\lambda}(|\beta_j|)$. The AIC and BIC can be viewed as penalised likelihoods with $\lambda = \sqrt(2/n)$ and $\sqrt(\log(n)/n)$. For fixed $a>2$, the SCAD penalty is the continuous function $p_{\lambda}(.)$ defined by  $p_{\lambda}(0) = 0$ and for $\beta \neq 0$ and $p'_{\lambda}(|\beta|)$ defined above. The penalty functions $p_{\lambda}(\beta)$ are nondecreasing and concave (they say that SCAD is non concave). They go on to say that SCAD is ok. 
+
+They show that the local quadratic approximation is an instance of an MM algorithm. They say that their derivation applies to any of the penalty functions aforementioned and SCAD is included.  
+
+\section{Hastie and Tibshirani on penalised regression \citet{hastie2009elements}}
+
+\section{Optimization - Penalty and Barrier Methods \citet{lange2000optimization}}
+
+It is profitable to view penalties and barriers from the perspective of the MM algorithm. We can engineer barrier tuning constants in a constrained
+minimisation problem so that the objective function is forced steadily downhill. 
+
+Lange writes $g_+(\bx)$ to be $g_+(\bx) = \max\{g(\bx), 0\}$. The penalty method works from the outside of the feasible region inward. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% REFERENCES
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+\clearpage
+
+\bibliographystyle{plainnat}
+\bibliography{bibtexfile}
+
+\end{document}
+
+
+
