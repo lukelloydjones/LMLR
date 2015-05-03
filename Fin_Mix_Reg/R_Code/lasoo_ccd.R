@@ -5,7 +5,7 @@
 rm(list = ls())
 setwd("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/")
 source('~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/R_Code/scad_scad_deriv_func.R')
-# ------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Read in the data phenotype and genotypes
 # ------------------------------------------------------------------------------
 X     <- read.table("Data/cape_verde_r10k.txt")
@@ -39,7 +39,7 @@ bwd.dds    <- matrix(0, nrow = dim(X)[2], ncol = 1)
 fwd.dds    <- matrix(0, nrow = dim(X)[2], ncol = 1)
 dds        <- matrix(0, nrow = dim(X)[2], ncol = 2)
 dg.dbeta   <- matrix(0, nrow = dim(X)[2], ncol = 1)
-lambda     <- 110
+lambda     <- 1
 mu         <- 0
 for (i in seq(1, 100))
 {
