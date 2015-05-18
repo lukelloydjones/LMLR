@@ -20,9 +20,9 @@ colnames(X) <- 1:ncol(X)
 # ------------------------------------------------------------------------------
 # Perform the L2 regression. Requires the predictors to be the rows
 # ------------------------------------------------------------------------------
-outL2     <- l2.reg(X, Y, 2)
+outL2     <- l2.reg(t(X), Y, 2)
 outL2est  <- l2.reg(X[outL2$selected, ], Y, lambda = 0)
-crossval2 <- cv.l2.reg(X, Y, 10, seq(0, 1, 0.01))
+crossval2 <- cv.l2.reg(t(X), Y, 10, seq(0, 20, 1))
 plot(crossval2)
 out2      <- l2.reg(X, Y, crossval2$lam.opt)
 # ------------------------------------------------------------------------------
@@ -38,6 +38,8 @@ rownames(pheno) <- pheno[, 1]
 Y <- pheno[, 3] # Let's try for skin first as there are less mising values
 X <- X[-which(Y == -9), ]
 Y <- Y[-which(Y == -9)]
+write.table(X, "cape_verde_r10k_raw.txt", col.names = F, row.names = F, quote = F, sep = "\t")
+write.table(Y, "cape_verde_pheno_raw.txt", col.names = F, row.names = F, quote = F, sep = "\t")
 n <- length(Y)
 library(MASS)
 # ------------------------------------------------------------------------------

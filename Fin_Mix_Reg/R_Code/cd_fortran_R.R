@@ -4,9 +4,9 @@
 # ------------------------------------------------------------------------------
 # Simulated data with many more predictors than individuals
 # ------------------------------------------------------------------------------
-n <- 500
-p <- 2000
-nz <- c(1:100)
+n <- 100
+p <- 500
+nz <- c(1:5)
 true.beta     <- rep(0, p)
 true.beta[nz] <- array(1, length(nz))
 X <- matrix(rnorm(n * p), n, p)
@@ -14,19 +14,21 @@ Y <- X %*% true.beta
 rownames(X) <- 1:nrow(X)
 colnames(X) <- 1:ncol(X)
 # ------------------------------------------------------------------------------
-# Subroutine LASSO_PENALISED_L2_REGRESSION translated
+# Function LASSO_PENALISED_L2_REGRESSION translated
 # ------------------------------------------------------------------------------
 # Uses module Coordinate Descent from above
 # Defines variables and memory
 # Integers
 # Doubles
+CDLasso <- function(X_mat, Y_mat, lambda)
+{
 CRITERION = 10e-5
 EPSILON   = 10e-8
 A <- 0.0 
 B <- 0.0 
 C <- 0.0 
 DL2 <- 0.0
-LAMBDA <- 2
+LAMBDA <- lambda
 L2 <- 0.0 
 OBJECTIVE <- 0.0
 PENALTY <- 0.0
@@ -39,9 +41,10 @@ RIGHT_L2 <- 0.0
 RIGHT_OBJECTIVE <- 0.0 
 RIGHT_PENALTY <- 0.0
 RIGHT_ROOT <- 0.0
+Y <- Y_mat
 M <- length(Y)
 # Add a columns of ones fro the intercept
-X <- cbind(array(1, M), X)
+X <- cbind(array(1, M), X_mat)
 N <- dim(X)[2]
 # Array to store the beta estimates
 ESTIMATE <- array(0,   N)
@@ -89,7 +92,7 @@ for (ITERATION in seq(1, 1000))
   
   for (i in seq(2, N))
   {
-  	#i = 1
+  	#i = 2
   	DL2 = -sum(R * X[, i])
   	A = ESTIMATE[i]
   	B = abs(A)
@@ -117,7 +120,7 @@ for (ITERATION in seq(1, 1000))
   	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY
   	# Find the root to the left of 0
   	# -------------------------------
-  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA) / SUM_X_SQUARES[i], 0)
   	LEFT_L2   = 0.0
   	C = A - LEFT_ROOT
   	for (j in seq(1, M))
@@ -156,7 +159,8 @@ for (ITERATION in seq(1, 1000))
   }
   if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)
   {
-  	stop("***We Have convergence***")
+  	print("***We Have convergence***")
+  	break
   	
   } else 
   {
@@ -165,14 +169,46 @@ for (ITERATION in seq(1, 1000))
   }
   
 }
-ESTIMATE  
-  
-  
-  
-  
-  
-  
-  
+
+return(ESTIMATE)
+} 
+# ------------------------------------------------------------------------------
+# Cross validation
+# ------------------------------------------------------------------------------  
+CrossVal <- function(X, Y, lambda, k)
+{
+	# Split X and Y over the folds
+	n <- dim(X)[1]
+	no.each.fold <- n / k
+	mse <- array(0, k)
+	for (i in seq(0, k - 1))
+	{
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+	  # The training sets
+	  X.train <- X[-k.elem, ]
+	  Y.train <- Y[-k.elem]
+	  # Calculate the lasso parameters from the training
+	  est.k <- cd_lasso(X.train, Y.train, lambda)
+	  # The prediction sets
+	  X.pred  <- X[k.elem, ]
+	  dim(X.pred)
+	  length(est.k[-1])
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]
+	  Y.pred  <- Y[k.elem]
+	  mse[i + 1] <- sum(abs(Y.est - Y.pred) ) / length(Y.pred)
+	}
+	return(mean(mse))
+}
+
+lassoParam  <- function(lam)
+{	x <- cross_val(X, Y, lam, 10) 
+	print(lam)
+	print(x)
+	x 
+} 
+
+ 
+optimise(lassoParam, c(0, 20))
   
 
 

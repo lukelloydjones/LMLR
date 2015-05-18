@@ -1,0 +1,2408 @@
+head(bnd.res)
+# ==============================================================================#
+# Function to draw Manhattan plots using ggplot#
+# ==============================================================================#
+GGManPlot <- function(df, freq.bayes, threshold) {#
+  # Produces a manhattan plot from a data frame#
+  # Args:#
+  #   df: a data frame that contains CHR, SNP, BP, p-value#
+  #   freq.bayes: flag to plot with frequentist or baysian properties#
+  #               0 for bayes and 1 for frequentist#
+  #   threshold: the threshold to plot line at and to create special#
+  #              points for those above the threshold#
+  # Returns:#
+  #  A Manhattan plot for the desired data frame#
+  # ----------------------------------------------------------------------------#
+  # Change the names of the data frame to match the ones needed below#
+  # ----------------------------------------------------------------------------#
+  names(df) <- c("CHR", "SNP", "BP", "P_VAL")#
+  # ----------------------------------------------------------------------------#
+  # Cycle over the chromosomes and create a cumulative sum of the BP#
+  # ----------------------------------------------------------------------------#
+  no.chrs  <- max(df[, 1])#
+  cum.bps  <- as.numeric(df[which(df[, 1] == 1), 3])#
+  chr.ends <- c(max(cum.bps))#
+  for (i in seq(2, no.chrs))#
+  {#
+    df.sub          <- df[which(df[, 1] == i), ]#
+    num.bps.chr.prv <- max(cum.bps)#
+    df.sub.cum      <- df.sub[, 3] + num.bps.chr.prv  #
+    cum.bps         <- as.numeric(c(cum.bps, df.sub.cum)) # So we don't get int OF#
+    chr.ends        <- c(chr.ends, max(df.sub.cum))#
+  }#
+  df$CUM_BP <- cum.bps#
+  # ----------------------------------------------------------------------------#
+  # Create midpoints for plotting chr name on x axis#
+  # ----------------------------------------------------------------------------#
+  chr.diff  <- chr.ends - c(0, chr.ends[-length(chr.ends)])#
+  mid.chr   <- c(0, chr.ends[-length(chr.ends)]) + chr.diff / 2#
+  # ----------------------------------------------------------------------------#
+  # Create a binary vector for those that are greater than threshold#
+  # ----------------------------------------------------------------------------#
+  df$ABOVE_THRESH <- array(0, dim(df)[1])#
+  df$ABOVE_THRESH[which(df[, 4] > threshold)] <- 0.5#
+  # ----------------------------------------------------------------------------#
+  # Create a data frame element for -log10(p-value)#
+  # ----------------------------------------------------------------------------#
+  df$LOG10_PVAL <- -log10(df[, 4])#
+  df$ABOVE_THRESH[df$LOG10_PVAL > threshold] <- 0.5#
+  # ----------------------------------------------------------------------------#
+  # Plot a frequentist or bayesian manhattan plot#
+  # ----------------------------------------------------------------------------#
+  if (freq.bayes == 0)#
+  {#
+    p <- qplot(CUM_BP, P_VAL, data = df, size = 2, colour = as.factor(CHR))#
+    q <- p + #
+      scale_colour_manual(values = rep(c("#AF8DC3", "#7FBF7B"), times = 11)) + #
+      geom_line(size = 1)  +#
+      theme_bw(base_size = 15) +#
+      theme(legend.position = 'none') +#
+      scale_x_continuous(labels = as.character(1 : no.chrs), breaks = mid.chr) + #
+      xlab('Chromosome') + #
+      ylab('Posterior inclusion probability') +#
+      ylim(c(0, 1)) +#
+      theme(axis.text=element_text(size = 16), #
+      axis.title = element_text(size = 18, face = "bold")) +#
+      geom_hline(y = threshold, linetype = 1, col = 'red', lwd = 0.5) #
+    q + geom_point(aes(size = ABOVE_THRESH), col = "black") + scale_shape(solid = FALSE)#
+    ggsave(filename = "manhattan_plot.png", plot = last_plot(), path = "~/Desktop", #
+           scale = 1, width = 45, height = 20, units = "cm", dpi = 300)#
+  } else {#
+    p <- qplot(CUM_BP, LOG10_PVAL, data = df, size = 2, colour = as.factor(CHR))#
+    q <- p + #
+      scale_colour_manual(values = rep(c("#AF8DC3", "#7FBF7B"), times = 11)) + #
+      geom_line(size = 1)  +#
+      theme_bw(base_size = 15) +#
+      theme(legend.position = 'none') +#
+      scale_x_continuous(labels = as.character(1 : no.chrs), breaks = mid.chr) + #
+      xlab('Chromosome') + #
+      ylab('-log10(p-value)') +#
+      ylim(c(0, max(df$LOG10_PVAL) + 1)) +#
+      theme(axis.text=element_text(size = 16), #
+      axis.title = element_text(size = 18, face = "bold")) +#
+      geom_hline(y = threshold, linetype = 1, col = 'red', lwd = 0.5) #
+    q + geom_point(aes(size = ABOVE_THRESH), col = "black") + scale_shape(solid = FALSE)#
+    ggsave(filename = "manhattan_plot.png", plot = last_plot(), path = "~/Desktop", #
+           scale = 1, width = 45, height = 20, units = "cm", dpi = 300)#
+  }#
+}
+head(bnd.res)
+cv.maf
+x <- read.table("~/Desktop/Cape_Verde_BayesR/Original_Raw_Data/CapeVerdeFinal_Pheno.fam")
+head(x)
+plot(density(x[, 6]))
+plot(density(x[-which(x[, 6] == -9), 6]))
+lines(density(x[-which(x[, 7] == -9), 7]))
+plot(density(x[-which(x[, 6] == -9), 7]))
+plot(density(x[-which(x[, 7] == -9), 7]))
+lines(density(x[-which(x[, 8] == -9), 8]))
+plot(density(x[-which(x[, 8] == -9), 8]))
+lines(density(x[-which(x[, 9] == -9), 9]))
+plot(density(x[-which(x[, 8] == -9), 8]), col = "green")
+plot(density(x[-which(x[, 8] == -9), 8]), col = "green", lwd = 2.5)
+lines(density(x[-which(x[, 9] == -9), 9]), col = "blue", lty = 2, lwd = 2.5)
+plot(density(x[-which(x[, 8] == -9), 8]), col = "green", lwd = 2.5, xlab = "Standardised phenotype")
+lines(density(x[-which(x[, 9] == -9), 9]), col = "blue", lty = 2, lwd = 2.5)
+plot(density(x[-which(x[, 8] == -9), 8]), col = "green", #
+      lwd = 2.5, xlab = "Standardised phenotype", main = "")#
+ lines(density(x[-which(x[, 9] == -9), 9]), col = "blue", lty = 2, lwd = 2.5)
+head( man.df)
+head(man.df)
+head(bnd.res)
+bim    <- read.table("~/Desktop/CapeVerdeFinal_maf.bim", header = T)
+bim    <- read.table("~/Desktop/Cape_Verde_BayesR/Cape_Verde_Data_Maf_Qc/CV_Maf/CapeVerdeFinal_maf.bim", header = T)
+head(bim)
+bim    <- read.table("~/Desktop/Cape_Verde_BayesR/Cape_Verde_Data_Maf_Qc/CV_Maf/CapeVerdeFinal_maf.bim", header = F)
+x1 <- sqrt(r^2 - y^2 - z^2)
+x <- seq(-20, 20, 0.01)#
+y <- seq(-20, 20, 0.01)#
+z <- seq(-20, 20, 0.01)#
+r <- 20#
+# Let's try and draw a sphere first just for fun#
+x1 <- sqrt(r^2 - y^2 - z^2)
+x1
+theta <- seq(0, 2 * pi, 0.01)
+x <- r * cos(theta)
+y <- r * sin(theta)
+plot(x, y)
+theta <- seq(0, 2 * pi, 0.1)#
+x <- r * cos(theta)#
+y <- r * sin(theta)#
+plot(x, y)
+scatterplot3d(x, y, z)
+library("scatterplot3d")
+?scatterplot3d
+??scatterplot3d
+install.packages("scatterplot3d")
+library("scatterplot3d")
+theta <- seq(0, 2 * pi, 0.1)#
+phi   <- seq(0, pi / 2, 0.1)#
+x <- r * cos(theta) * sin(phi)#
+y <- r * sin(theta) * sin(phi)#
+z <- r * cos(phi)
+theta <- seq(0, 2 * pi, 0.1)#
+phi   <- seq(0, pi / 2, 0.1 / 4)#
+x <- r * cos(theta) * sin(phi)#
+y <- r * sin(theta) * sin(phi)#
+z <- r * cos(phi)
+scatterplot3d(x, y, z)
+temp <- seq(-pi, 0, length = 50)#
+ x <- c(rep(1, 50) %*% t(cos(temp))) #
+ y <- c(cos(temp) %*% t(sin(temp))) #
+ z <- 10 * c(sin(temp) %*% t(sin(temp)))
+scatterplot3d(x, y, z, color, pch=20, zlim=c(-2, 10), main="scatterplot3d - 3")
+temp <- seq(-pi, 0, length = 50)#
+ x <- c(rep(1, 50) %*% t(cos(temp))) #
+ y <- c(cos(temp) %*% t(sin(temp))) #
+ z <- 10 * c(sin(temp) %*% t(sin(temp)))#
+ color <- rep("green", length(x)) #
+ temp <- seq(-10, 10, 0.01) #
+ x <- c(x, cos(temp))#
+  y <- c(y, sin(temp))#
+ z <- c(z, temp) color <- c(color, rep("red", length(temp)))#
+scatterplot3d(x, y, z, color, pch=20, zlim=c(-2, 10), main="scatterplot3d - 3")
+temp <- seq(-pi, 0, length = 50)#
+ x <- c(rep(1, 50) %*% t(cos(temp))) #
+ y <- c(cos(temp) %*% t(sin(temp))) #
+ z <- 10 * c(sin(temp) %*% t(sin(temp)))#
+ color <- rep("green", length(x)) #
+ temp <- seq(-10, 10, 0.01) #
+ x <- c(x, cos(temp))#
+  y <- c(y, sin(temp))#
+ z <- c(z, temp) #
+ color <- c(color, rep("red", length(temp)))#
+scatterplot3d(x, y, z, color, pch=20, zlim=c(-2, 10), main="scatterplot3d - 3")
+x <- r * cos(theta) * sin(phi)#
+y <- r * sin(theta) * sin(phi)#
+z <- r * cos(phi)
+length(x)
+length(y)
+x
+theta
+theta.2 <- rep(theta, length(phi))
+phi.2   <- rep(phi, each = length(theta))
+grid <- cbind(theta.2, phi.2)
+head(grid)
+dim(grid)
+x <- r * cos(theta.2) * sin(phi.2)#
+y <- r * sin(theta.2) * sin(phi.2)#
+z <- r * cos(phi.2)
+scatterplot3d(x, y, z)
+scatterplot3d(x, y, z, xlim = c(-20, 20), ylim = c(-20, 20), zlim = c(-20, 20))
+theta <- seq(0, 2 * pi, 0.1)#
+phi   <- seq(0, pi, 0.1 / 2)#
+theta.2 <- rep(theta, length(phi))#
+phi.2   <- rep(phi, each = length(theta))#
+grid <- cbind(theta.2, phi.2)#
+x <- r * cos(theta.2) * sin(phi.2)#
+y <- r * sin(theta.2) * sin(phi.2)#
+z <- r * cos(phi.2)#
+# Load the package for 3d scatter plot#
+install.packages("scatterplot3d")#
+library("scatterplot3d")#
+scatterplot3d(x, y, z, xlim = c(-20, 20), ylim = c(-20, 20), #
+              zlim = c(-20, 20))
+Temp <- (x + y) ^ 2 + (y - z) ^ 2
+?scatterplot3d
+Temp <- (x + y) ^ 2 + (y - z) ^ 2#
+scatterplot3d(x, y, z, Temp, xlim = c(-20, 20), ylim = c(-20, 20), #
+              zlim = c(-20, 20))
+Temp
+max(Temp)
+min(Temp)
+mean(Temp)
+step <- 0.01#
+theta   <- seq(0, 2 * pi, step)#
+phi     <- seq(0, pi, step / 2)#
+theta.2 <- rep(theta, length(phi))#
+phi.2   <- rep(phi, each = length(theta))#
+grid    <- cbind(theta.2, phi.2)#
+x       <- r * cos(theta.2) * sin(phi.2)#
+y       <- r * sin(theta.2) * sin(phi.2)#
+z       <- r * cos(phi.2)#
+# Load the package for 3d scatter plot#
+install.packages("scatterplot3d")#
+library("scatterplot3d")#
+Temp <- (x + y) ^ 2 + (y - z) ^ 2#
+max(Temp)#
+min(Temp)#
+mean(Temp)#
+scatterplot3d(x, y, z, Temp, xlim = c(-20, 20), ylim = c(-20, 20), #
+              zlim = c(-20, 20))
+library(rgl)
+install.packages("rgl")
+library(rgl)
+myColorRamp <- function(colors, values) {#
+    v <- (values - min(values))/diff(range(values))#
+    x <- colorRamp(colors)(v)#
+    rgb(x[,1], x[,2], x[,3], maxColorValue = 255)#
+}
+x <- sin((1:100)/10)#
+y <- cos((1:100)/10)#
+z <- seq(-20, 20, length.out=100)#
+#
+cols <- myColorRamp(c("red", "blue"), z) #
+plot3d(x = x, y = y, z = z, col = cols)
+myColorRamp <- function(colors, values) {#
+    v <- (values - min(values))/diff(range(values))#
+    x <- colorRamp(colors)(v)#
+    rgb(x[,1], x[,2], x[,3], maxColorValue = 255)#
+}#
+x       <- r * cos(theta.2) * sin(phi.2)#
+y       <- r * sin(theta.2) * sin(phi.2)#
+z       <- r * cos(phi.2)#
+Temp <- (x + y) ^ 2 + (y - z) ^ 2#
+cols <- myColorRamp(c("red", "blue"), Temp) #
+plot3d(x = x, y = y, z = z, col = cols)
+mean(Temp)
+sin(phi)
+3537355209 / 1e9
+78483927 - 78421192
+80990638 - 80727903
+step    <- 0.001#
+r       <- 20#
+theta   <- seq(0, 2 * pi, step)#
+phi     <- seq(0, pi, step / 2)#
+theta.2 <- rep(theta, length(phi))#
+phi.2   <- rep(phi, each = length(theta))#
+grid    <- cbind(theta.2, phi.2)#
+#theta.2 <- pi / 4#
+#phi.2   <- pi / 2#
+x       <- r * cos(theta.2) * sin(phi.2)#
+y       <- r * sin(theta.2) * sin(phi.2)#
+z       <- r * cos(phi.2)
+Temp <- (x + y) ^ 2 + (y - z) ^ 2
+mean(Temp)
+step    <- 0.0005#
+r       <- 20#
+theta   <- seq(0, 2 * pi, step)#
+phi     <- seq(0, pi, step / 2)#
+theta.2 <- rep(theta, length(phi))#
+phi.2   <- rep(phi, each = length(theta))#
+grid    <- cbind(theta.2, phi.2)#
+#theta.2 <- pi / 4#
+#phi.2   <- pi / 2#
+x       <- r * cos(theta.2) * sin(phi.2)#
+y       <- r * sin(theta.2) * sin(phi.2)#
+z       <- r * cos(phi.2)
+Temp <- (x + y) ^ 2 + (y - z) ^ 2
+mean(Temp)
+Temp <- (y + z) ^ 2 + (z - x) ^ 2
+mean(Temp)
+Temp <- (z + x) ^ 2 + (x - y) ^ 2
+mean(Temp)
+500+600+500
+358438657327 - 243363906560
+115074750767/1e9
+setwd("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/")#
+# ------------------------------------------------------------------------------#
+# Read in the data phenotype and genotypes#
+# ------------------------------------------------------------------------------#
+X     <- read.table("Data/cape_verde_r10k.txt")#
+pheno <- read.table("Data/cape_verde_pheno.txt", header = T)#
+rownames(pheno) <- pheno[, 1]#
+Y <- pheno[, 3] # Let's try for skin first as there are less mising values#
+X <- X[-which(Y == -9), ]#
+Y <- Y[-which(Y == -9)]#
+write.table(X, "cape_verde_r10k_raw.txt", col.names = F, row.names = F, quote = F, sep = "\t")#
+write.table(Y, "cape_verde_pheno_raw.txt", col.names = F, row.names = F, quote = F, sep = "\t")#
+n <- length(Y)#
+library(MASS)#
+# ------------------------------------------------------------------------------#
+# Get rid of the NAs for now. Deal with them properly later #
+# ------------------------------------------------------------------------------#
+X[is.na(X)] <- sample( c(0, 1, 2), length(which(is.na(X))), replace = TRUE)
+head(X)
+getwd()
+write.table(rownames(X), "cape_verde_r10k.fam", quote = F, row.names = F, col.names = F)
+write.table(colnames(X), "cape_verde_r10k.bim", quote = F, row.names = F, col.names = F)
+getwd()
+x <- read.table("cape_verde_r10k_raw.txt")
+dim(x)
+6.68854/0.151464
+x <- read.table("~/Dropbox/Git_Repos/Fin_Mix_Reg/Data/cape_verde_r10k_raw.txt")
+swetwd("~/Dropbox/Git_Repos/Fin_Mix_Reg/Data/")
+setwd("~/Dropbox/Git_Repos/Fin_Mix_Reg/Data/")
+dim(x)
+write.csv(x, "cape_verde_r10k_raw.csv", row.names = F, col.names = F, quote = F)
+?write.csv
+write.table(x, "cape_verde_r10k_raw.csv", row.names = F, col.names = F, quote = F, sep = ",")
+clear
+# ==============================================================================#
+# Attempts to translate Lange's CD code from Fortran#
+# ==============================================================================#
+# ------------------------------------------------------------------------------#
+# Simulated data with many more predictors than individuals#
+# ------------------------------------------------------------------------------#
+n <- 100#
+p <- 5000#
+nz <- c(1:100)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)#
+# ------------------------------------------------------------------------------#
+# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
+# ------------------------------------------------------------------------------#
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- 2#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+#X <- cbind(array(1, M), X)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	stop("***We Have convergence***")#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+ESTIMATE
+# ==============================================================================#
+# Attempts to translate Lange's CD code from Fortran#
+# ==============================================================================#
+# ------------------------------------------------------------------------------#
+# Simulated data with many more predictors than individuals#
+# ------------------------------------------------------------------------------#
+n <- 1000#
+p <- 5000#
+nz <- c(1:5)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)#
+# ------------------------------------------------------------------------------#
+# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
+# ------------------------------------------------------------------------------#
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- 2#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+#X <- cbind(array(1, M), X)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	stop("***We Have convergence***")#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+ESTIMATE
+# ==============================================================================#
+# Attempts to translate Lange's CD code from Fortran#
+# ==============================================================================#
+# ------------------------------------------------------------------------------#
+# Simulated data with many more predictors than individuals#
+# ------------------------------------------------------------------------------#
+n <- 100#
+p <- 500#
+nz <- c(1:5)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)#
+# ------------------------------------------------------------------------------#
+# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
+# ------------------------------------------------------------------------------#
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- 2#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+#X <- cbind(array(1, M), X)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	stop("***We Have convergence***")#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+ESTIMATE
+# ==============================================================================#
+# Attempts to translate Lange's CD code from Fortran#
+# ==============================================================================#
+# ------------------------------------------------------------------------------#
+# Simulated data with many more predictors than individuals#
+# ------------------------------------------------------------------------------#
+n <- 100#
+p <- 500#
+nz <- c(1:5)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)#
+# ------------------------------------------------------------------------------#
+# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
+# ------------------------------------------------------------------------------#
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- 2#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	stop("***We Have convergence***")#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+ESTIMATE
+# ==============================================================================#
+# Attempts to translate Lange's CD code from Fortran#
+# ==============================================================================#
+# ------------------------------------------------------------------------------#
+# Simulated data with many more predictors than individuals#
+# ------------------------------------------------------------------------------#
+n <- 100#
+p <- 500#
+nz <- c(1:5)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)#
+# ------------------------------------------------------------------------------#
+# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
+# ------------------------------------------------------------------------------#
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- 2#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+ESTIMATE
+cd_lasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+}
+cd_lasso(X, Y, 2)
+n <- 100#
+p <- 500#
+nz <- c(1:5)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)
+cd_lasso(X, Y, 2)
+dim(X)[1]
+k = 10
+no.each.fold <- n / k
+no.each.fold
+for (i in seq(0, k - 1))#
+	{#
+	  print(seq(i + 1: i * no.each.fold))#
+	  X.k <- X[ i + 1: i * no.each.fold]#
+	  Y.k <- #
+	}
+i = 0
+seq(i + 1: i * no.each.fold)
+i = 1
+seq(i + 1: (i + 1) * no.each.fold)
+seq(i, (i + 1) * no.each.fold)
+seq(i, i * no.each.fold)
+i = 2
+i, i * no.each.fold)
+seq(i, i * no.each.fold)
+i = 0
+seq(i * no.each.fold, (i + 1) * no.each.fold)
+i = 1
+seq(i * no.each.fold, (i + 1) * no.each.fold)
+i = 0
+seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+i = 1
+seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+i = 2
+seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  print(k.elem)#
+	  #X.k <- X[ i + 1: i * no.each.fold]#
+	  #Y.k <- #
+	}
+n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem, ]#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.pred  <- Y[k.elem, ]#
+	  print(c(dim(X.train), dim(Y.train), dim(X.pred), dim(Y.pred)))#
+	}
+dim(X.train)
+dim(Y.train)
+n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.pred  <- Y[k.elem]#
+	  print(c(dim(X.train), dim(Y.train), dim(X.pred), dim(Y.pred)))#
+	}
+dim(Y.train)
+Y
+Y[-k.elem]
+for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.pred  <- Y[k.elem]#
+	  print(c(dim(X.train), length(Y.train), dim(X.pred), length(Y.pred)))#
+	}
+dim(X.train)
+dim(X.pred)
+length(Y.train)
+length(Y.pred)
+i = 1
+k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+X.train <- X[-k.elem, ]
+Y.train <- Y[-k.elem]
+est.k <- cd_lasso(X.train, Y.train, lambda)
+lambda = 1
+est.k <- cd_lasso(X.train, Y.train, lambda)
+est.k
+length(est.k)
+Y.est   <- est.k[1] + X.pred%*%est.k[-1]
+Y.est
+Y[k.elem]
+k.elem
+k.elem
+Y[k.elem]
+est.k[1]
+i = 1#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)
+X.pred  <- X[k.elem, ]
+k.elem
+Y.est   <- est.k[1] + X.pred%*%est.k[-1]
+Y.est
+Y[k.elem]
+sum((Y.est - Y.pred) ^ 2) / length(Y.pred)
+n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[k] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}
+mse
+# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}
+mse
+i = 0
+k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+k.elem
+X.train <- X[-k.elem, ]
+Y.train <- Y[-k.elem]
+est.k <- cd_lasso(X.train, Y.train, lambda)
+X.pred  <- X[k.elem, ]
+Y.est   <- est.k[1] + X.pred%*%est.k[-1]
+Y.pred  <- Y[k.elem]
+Y.est
+Y.pred
+sum((Y.est - Y.pred) ^ 2)
+(Y.est - Y.pred)
+(Y.est - Y.pred) ^ 2
+length(Y.pred)
+cross_val <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  i = 0#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}
+for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}
+mean(mse)
+cross_val <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}
+cd_lasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	#print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+}
+cross_val(X, Y, 1, 10)
+CDLasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	#print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+}
+CrossVal <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}
+lassoParam  <- function(lam)#
+{#
+	cross_val(X, Y, lam, 10)  #
+}
+lassoParam(10)
+optimise(lassoParam, c(0, 20))
+?optimise
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	x #
+} #
+optimise(lassoParam, c(0, 20))
+CDLasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	#print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	#print(NEW_OBJECTIVE)#
+  }#
+}
+}
+CDLasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	#print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	#print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+} #
+# ----
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	x #
+} #
+optimise(lassoParam, c(0, 20))
+CDLasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	#print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	#print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+}
+CrossVal <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	x #
+}
+optimise(lassoParam, c(0, 20))
+CrossVal <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum((Y.est - Y.pred) ^ 2) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}#
+#
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	print(x)#
+	x #
+} #
+optimise(lassoParam, c(0, 20))
+outL2     <- l2.reg(X, Y, 2)
+library("CDLasso")
+install.packages("CDLasso")
+library("CDLasso")
+outL2     <- l2.reg(X, Y, 2)
+outL2     <- l2.reg(t(X), Y, 2)
+crossval2 <- cv.l2.reg(t(X), Y, 10, seq(0, 1, 0.01))
+plot(crossval2)
+crossval2
+lassoParam(0.01)
+?cv.l2.reg
+lassoParam(1)
+CrossVal <- function(X, Y, lambda, k)#
+{#
+	# Split X and Y over the folds#
+	n <- dim(X)[1]#
+	no.each.fold <- n / k#
+	mse <- array(0, k)#
+	for (i in seq(0, k - 1))#
+	{#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  # The training sets#
+	  X.train <- X[-k.elem, ]#
+	  Y.train <- Y[-k.elem]#
+	  # Calculate the lasso parameters from the training#
+	  est.k <- cd_lasso(X.train, Y.train, lambda)#
+	  # The prediction sets#
+	  X.pred  <- X[k.elem, ]#
+	  Y.est   <- est.k[1] + X.pred%*%est.k[-1]#
+	  Y.pred  <- Y[k.elem]#
+	  mse[i + 1] <- sum(abs(Y.est - Y.pred) ) / length(Y.pred)#
+	}#
+	return(mean(mse))#
+}
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	print(x)#
+	x #
+}
+lassoParam(1)
+X.pred  <- X[k.elem, ]
+dim(X.pred)
+length(est.k[-1])
+est.k[-1]
+l2.reg(t(X.train), Y.train, 1)
+head(est.k)
+length(Y.pred)
+mse
+n <- 100#
+p <- 500#
+nz <- c(1:100)#
+true.beta     <- rep(0, p)#
+true.beta[nz] <- array(1, length(nz))#
+X <- matrix(rnorm(n * p), n, p)#
+Y <- X %*% true.beta#
+rownames(X) <- 1:nrow(X)#
+colnames(X) <- 1:ncol(X)
+crossval2 <- cv.l2.reg(t(X), Y, 10, seq(0, 10, 1))
+crossval2
+lassoParam  <- function(lam)#
+{	x <- cross_val(X, Y, lam, 10) #
+	print(lam)#
+	print(x)#
+	x #
+} #
+optimise(lassoParam, c(0, 20))
+crossval2 <- cv.l2.reg(t(X), Y, 10, seq(0, 20, 1))
+crossval2
