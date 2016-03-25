@@ -22,7 +22,7 @@ colnames(X) <- 1:ncol(X)
 # ------------------------------------------------------------------------------
 outL2     <- l2.reg(t(X), Y, 2)
 outL2est  <- l2.reg(X[outL2$selected, ], Y, lambda = 0)
-crossval2 <- cv.l2.reg(t(X), Y, 10, seq(0, 20, 1))
+crossval2 <- cv.l2.reg(t(X), Y, 10, seq(15, 30, 1))
 plot(crossval2)
 out2      <- l2.reg(X, Y, crossval2$lam.opt)
 # ------------------------------------------------------------------------------
@@ -48,14 +48,17 @@ library(MASS)
 X[is.na(X)] <- sample( c(0, 1, 2), length(which(is.na(X))), replace = TRUE)
 X  <- as.matrix(X)
 X2 <- X
-X  <- X[, 1:5000]
+X  <- X[, 1:50]
 P  <- dim(X)[2]
+X <- X2
 # ------------------------------------------------------------------------------
 # Correct geno for allele frequencies - puts each column on mu = 0, var = 1
 # ------------------------------------------------------------------------------
 for (j in seq(1, P)) {
- q <- sum(X[, j] / (2 * n))			    #Calculate the reference allele freq
- X[, j] <- (X[, j] - 2 * q) / sqrt(2 * q * (1 - q))	#Centre and then scale 
+  #j# = 1
+  q <- sum(X[, j] / (2 * n), na.rm = T)			    #Calculate the reference allele freq
+  print(q)
+  X[, j] <- (X[, j] - 2 * q) / sqrt(2 * q * (1 - q))	#Centre and then scale 
 }
 # ------------------------------------------------------------------------------
 # Perform the L2 regression. Requires the predictors to be the rows

@@ -1,18 +1,36 @@
 # ==============================================================================
 # Attempts to translate Lange's CD code from Fortran
 # ==============================================================================
+rm(list = ls())
+source('~/Dropbox/Post_Doc_QBI/R_Functions/plink_read_func.R', 
+       chdir = TRUE)
+setwd("~/Desktop")
+X <- read.plink("INP_SNPs")
+P <- dim(X)[2]
+N <- dim(X)[1]
+for (j in seq(1, P)) {
+  # Calculate the reference allele freq
+  q <- sum(X[, j] / (2 * N)) 
+  # Centre and then scale 
+  X[, j] <- (X[, j] - 2 * q) / sqrt(2 * q * (1 - q))	
+}
+pheno <- read.table("INP_SNPs.pheno")
+head(pheno)
+Y <- pheno[, 7]
+#X <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/Data/", header = F)
+#Y <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/Y.csv", header = F)
 # ------------------------------------------------------------------------------
 # Simulated data with many more predictors than individuals
 # ------------------------------------------------------------------------------
-n <- 100
-p <- 500
-nz <- c(1:5)
-true.beta     <- rep(0, p)
-true.beta[nz] <- array(1, length(nz))
-X <- matrix(rnorm(n * p), n, p)
-Y <- X %*% true.beta
-rownames(X) <- 1:nrow(X)
-colnames(X) <- 1:ncol(X)
+# n <- 100
+# p <- 500
+# nz <- c(1:5)
+# true.beta     <- rep(0, p)
+# true.beta[nz] <- array(1, length(nz))
+# X <- matrix(rnorm(n * p), n, p)
+# Y <- X %*% true.beta
+# rownames(X) <- 1:nrow(X)
+# colnames(X) <- 1:ncol(X)
 # ------------------------------------------------------------------------------
 # Function LASSO_PENALISED_L2_REGRESSION translated
 # ------------------------------------------------------------------------------
@@ -20,6 +38,8 @@ colnames(X) <- 1:ncol(X)
 # Defines variables and memory
 # Integers
 # Doubles
+X_mat = X
+Y_mat = Y
 CDLasso <- function(X_mat, Y_mat, lambda)
 {
 CRITERION = 10e-5
@@ -179,16 +199,21 @@ CrossVal <- function(X, Y, lambda, k)
 {
 	# Split X and Y over the folds
 	n <- dim(X)[1]
-	no.each.fold <- n / k
+	no.each.fold <- floor(n / k)
 	mse <- array(0, k)
 	for (i in seq(0, k - 1))
 	{
+	  i = k - 1
 	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+	  if ( i == (k - 1)) 
+	  { 
+	  	k.elem <- seq(i * no.each.fold + 1, n) 
+	  }
 	  # The training sets
 	  X.train <- X[-k.elem, ]
 	  Y.train <- Y[-k.elem]
 	  # Calculate the lasso parameters from the training
-	  est.k <- cd_lasso(X.train, Y.train, lambda)
+	  est.k <- CDLasso(X.train, Y.train, lambda)
 	  # The prediction sets
 	  X.pred  <- X[k.elem, ]
 	  dim(X.pred)
@@ -200,15 +225,15 @@ CrossVal <- function(X, Y, lambda, k)
 	return(mean(mse))
 }
 
-lassoParam  <- function(lam)
-{	x <- cross_val(X, Y, lam, 10) 
+LassoParam  <- function(lam)
+{	x <- CrossVal(X, Y, lam, 10) 
 	print(lam)
 	print(x)
 	x 
 } 
 
  
-optimise(lassoParam, c(0, 20))
+optimise(LassoParam, c(0, 20))
   
 
 

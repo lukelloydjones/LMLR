@@ -1,653 +1,1143 @@
-?error
-?stop
+# ------------------------------------------------------------------------------#
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6
+beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+beta.2
+beta.1
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}
+pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+beta.2
+round(beta.2, 1)
+round(beta.1)
+# Set the number of individuals to be n and p#
+n <- 100#
+p <- 500#
+# Create an observed Z matrix drawn from N(0, 1)#
+X <- matrix(rnorm(n * p), n, p)#
+# Add in the intercept column #
+X <- cbind(array(1, n), X)#
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)#
+# Run our lasso on it and get the results#
+#x <- CDLasso(X[, -1], Y, 15)#
+# Plot and compare#
+#lines(density(X%*%x), col = "blue", lwd = 2.5)#
+# Lasso seems to work but chooses the wrong set of betas#
+# ===============================================================#
+# Try and fix mixture of regressions code#
+# ===============================================================#
+# ------------------------------------------------------------------------------#
+# Initialise the parameters - start with k = 2 #
+# ------------------------------------------------------------------------------#
+beta.1 <-  matrix(0.1, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(-0.1, nrow = dim(X)[2] ,  ncol = 1)#
+beta.1[1] <- 5#
+beta.2[1] <- -5#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 1#
+# ------------------------------------------------------------------------------#
+# Initialise the weights#
+# ------------------------------------------------------------------------------#
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+beta.2
+round(beta.2, 1)
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+round(beta.1, 2)
+round(beta.2, 2)
+var.1
+var.2
+pi.1
+pi.2
+w.1
+w.2
+diag.pen.1
+beta.1.pen
+mu.1
+mu.2
+sample(mu.1, 40)
+plot(density(c(sample(mu.1, 40), sample(mu.2, 60)))
+)
+plot(density(c(sample(mu.1, 40), sample(mu.2, 60))))
+lines(density(Y))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))))#
+	lines(density(Y))#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+n <- 100#
+p <- 500#
+# Create an observed Z matrix drawn from N(0, 1)#
+X <- matrix(rnorm(n * p), n, p)#
+# Add in the intercept column #
+X <- cbind(array(1, n), X)#
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)#
+# Run our lasso on it and get the results#
+#x <- CDLasso(X[, -1], Y, 15)#
+# Plot and compare#
+#lines(density(X%*%x), col = "blue", lwd = 2.5)#
+# Lasso seems to work but chooses the wrong set of betas#
+# ===============================================================#
+# Try and fix mixture of regressions code#
+# ===============================================================#
+# ------------------------------------------------------------------------------#
+# Initialise the parameters - start with k = 2 #
+# ------------------------------------------------------------------------------#
+beta.1 <-  matrix(0.1, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(-0.1, nrow = dim(X)[2] ,  ncol = 1)#
+beta.1[1] <- 5#
+beta.2[1] <- -5#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 0.5
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+c(1, 495:500)
+# Set the number of individuals to be n and p#
+n <- 100#
+p <- 500#
+# Create an observed Z matrix drawn from N(0, 1)#
+X <- matrix(rnorm(n * p), n, p)#
+# Add in the intercept column #
+X <- cbind(array(1, n), X)#
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)#
+# Run our lasso on it and get the results#
+#x <- CDLasso(X[, -1], Y, 15)#
+# Plot and compare#
+#lines(density(X%*%x), col = "blue", lwd = 2.5)#
+# Lasso seems to work but chooses the wrong set of betas#
+# ===============================================================#
+# Try and fix mixture of regressions code#
+# ===============================================================#
+# ------------------------------------------------------------------------------#
+# Initialise the parameters - start with k = 2 #
+# ------------------------------------------------------------------------------#
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.1[1:6] <- c(5, 1, 1, 1, 1, 1)#
+beta.2[c(1, 495:500)] <- c(-5, 1, 1, 1, 1, 1)#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 0.5#
+# ------------------------------------------------------------------------------#
+# Initialise the weights#
+# ------------------------------------------------------------------------------#
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6
+# Set the number of individuals to be n and p#
+n <- 100#
+p <- 500#
+# Create an observed Z matrix drawn from N(0, 1)#
+X <- matrix(rnorm(n * p), n, p)#
+# Add in the intercept column #
+X <- cbind(array(1, n), X)#
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)#
+# Run our lasso on it and get the results#
+#x <- CDLasso(X[, -1], Y, 15)#
+# Plot and compare#
+#lines(density(X%*%x), col = "blue", lwd = 2.5)#
+# Lasso seems to work but chooses the wrong set of betas#
+# ===============================================================#
+# Try and fix mixture of regressions code#
+# ===============================================================#
+# ------------------------------------------------------------------------------#
+# Initialise the parameters - start with k = 2 #
+# ------------------------------------------------------------------------------#
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.1[1:6] <- c(5, 1, 1, 1, 1, 1)#
+beta.2[c(1, 495:500)] <- c(-5, 1, 1, 1, 1, 1)#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 0.5#
+# ------------------------------------------------------------------------------#
+# Initialise the weights#
+# ------------------------------------------------------------------------------#
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+495:500
+beta.2
+n <- 100#
+p <- 500#
+# Create an observed Z matrix drawn from N(0, 1)#
+X <- matrix(rnorm(n * p), n, p)#
+# Add in the intercept column #
+X <- cbind(array(1, n), X)#
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)
+beta.2
+beta.1
+# Create two sets of betas each with 10 non-zero elements#
+beta.1 <- c(rep(1, 5), rep(0, 495))#
+beta.2 <- c(rep(0, 495), rep(1, 5))#
+# Add the intercepts for each group#
+beta.1 <- c(5, beta.1)#
+beta.2 <- c(-5, beta.2)#
+# Check the dimensions#
+dim(X)#
+length(beta.1)#
+length(beta.2)#
+# Cycle over the rows and sample a value from each mean#
+mu.1 <- array(0, n)#
+mu.2 <- array(0, n)#
+for (i in seq(1, n)) {#
+  mu.1[i] <- rnorm(1, sum(X[i, ] * beta.1), 1)#
+  mu.2[i] <- rnorm(1, sum(X[i, ] * beta.2), 2)#
+}#
+# Create the phenotype#
+Y <- c(sample(mu.1, 40), sample(mu.2, 60))#
+plot(density(Y), col = "green", lwd = 2.5)
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)
+beta.1[1:6]
+beta.1[1:6] <- c(5, 1, 1, 1, 1, 1)
+beta.1
+beta.2[c(1, 496:500)]
+beta.2[c(1, 496:500)] <- c(-5, 1, 1, 1, 1, 1)
+beta.2
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.1[1:6] <- c(5, 1, 1, 1, 1, 1)#
+beta.2[c(1, 497:501)] <- c(-5, 1, 1, 1, 1, 1)#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 0.5
+beta.2
+beta.1 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.2 <- matrix(0, nrow = dim(X)[2] , ncol = 1)#
+beta.1[1:6] <- c(5, 1, 1, 1, 1, 1)#
+beta.2[c(1, 497:501)] <- c(-5, 1, 1, 1, 1, 1)#
+# Remember that the first element is the mean element of each group#
+pi.1   <- 0.4#
+pi.2   <- 1 - pi.1#
+var.1  <- 1#
+var.2  <- 2#
+eps    <- 10e-5 # The perturbation factor from Hunter and Li#
+lambda <- 0.5
+mu.1  <- X %*% beta.1#
+mu.2  <- X %*% beta.2#
+w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+         (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+         ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}
+pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)
+for (r in seq(1, 500)) {#
+	# ------------------------------------------------------------------------------#
+	# Update the the weights given the pis and variances#
+	# ------------------------------------------------------------------------------#
+	mu.1  <- X %*% beta.1#
+	mu.2  <- X %*% beta.2#
+	plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green")#
+	lines(density(Y), col = "blue")#
+	w.1 <- array(0, n)#
+	w.2 <- array(0, n)#
+	for (i in seq(1, n))#
+	{#
+	 w.1[i]   <- (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	 w.2[i]   <- (pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) ) / #
+	          (pi.1  * dnorm(Y[i], mu.1[i], sqrt(var.1)) + #
+	           pi.2  * dnorm(Y[i], mu.2[i], sqrt(var.2)) )#
+	}#
+	# ------------------------------------------------------------------------------#
+	# Update the pis and variances #
+	# ------------------------------------------------------------------------------#
+	#pi.1  <- max(sum(w.1) / n, 10e-6)#
+	#pi.2  <- max(sum(w.2) / n, 10e-6)#
+	pi.1  <- 0.4#
+	pi.2  <- 0.6#
+	# var.1 <- max(sum(w.1 * (Y - X %*% beta.1) ^ 2) / sum(w.1), 10e-6)#
+	# var.2 <- max(sum(w.2 * (Y - X %*% beta.2) ^ 2) / sum(w.2), 10e-6)#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalisation matrices#
+	# ------------------------------------------------------------------------------#
+	# Generate the penalty matrices with the perturbed denominator#
+	#beta.1.pen <- unlist(lapply(beta.1, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	#beta.2.pen <- unlist(lapply(beta.2, p.scad.deriv, lambda = 1, a = 3.7, n = n))#
+	beta.1.pen <- sqrt(n) * lambda#
+	beta.2.pen <- sqrt(n) * lambda#
+	diag.pen.1 <- c(beta.1.pen / (eps + abs(beta.1[-1])))#
+	diag.pen.2 <- c(beta.2.pen / (eps + abs(beta.2[-1])))#
+	E.mat.1    <- diag(diag.pen.1)#
+	E.mat.2    <- diag(diag.pen.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1 - Generate the weighted matrices - do the update #
+	# ------------------------------------------------------------------------------#
+	W.mat.1 <- diag(w.1) * (1 / var.1)#
+	W.mat.2 <- diag(w.2) * (1 / var.2)#
+	beta.1  <- solve(t(X[, -1]) %*% W.mat.1 %*% X[, -1] + E.mat.1) %*% (t(X[, -1]) %*% W.mat.1 %*% Y)#
+	beta.2  <- solve(t(X[, -1]) %*% W.mat.2 %*% X[, -1] + E.mat.2) %*% (t(X[, -1]) %*% W.mat.2 %*% Y)#
+	beta.1 <- c(5,  beta.1)#
+	beta.2 <- c(-5, beta.2)#
+	# ------------------------------------------------------------------------------#
+	# Update beta 1#
+	# ------------------------------------------------------------------------------#
+	# # Build the denominator of the first group#
+	# X.sqr.pi      <- matrix(0, ncol = p, nrow = p)#
+	# for (i in seq(1, n)) {#
+	  # X.sqr.temp    <- X[i, -1] %*% t(X[i, -1])#
+	  # X.sqr.pi      <- X.sqr.pi + w.1[i] *  X.sqr.temp#
+	# }#
+	# beta.1.denom     <- pi.1 * W.mat.1 + (1 / var.1) * X.sqr.pi#
+	# beta.1.denom.inv <- solve(beta.1.denom)#
+	# #beta.1.denom.inv <- ginv(beta.1.denom)#
+	# # Build the numerator of the first group#
+	# X.y      <- matrix(0, ncol = p, nrow = 1)#
+	# for (i in seq(1, n)){#
+	  # X.y.temp <- X[i, -1] * Y[i]#
+	  # X.y      <- X.y + w.1[i] *  X.y.temp#
+	# }#
+	# beta.1.numer <- as.numeric((1 / var.1) * X.y) #
+	# # Update beta.1#
+	# beta.1.m <- beta.1#
+	# beta.1   <- beta.1.denom.inv %*% beta.1.numer#
+	# # ------------------------------------------------------------------------------#
+	# # Update beta 2#
+	# # ------------------------------------------------------------------------------#
+	# # Build the denominator of the second group#
+	# X.sqr.pi      <- matrix(0, ncol = p, nrow = p)#
+	# for (i in seq(1, n)) {#
+	  # X.sqr.temp <- X[i, -1] %*% t(X[i, -1])#
+	  # X.sqr.pi   <- X.sqr.pi  + w.2[i] *  X.sqr.temp#
+	# }#
+	# beta.2.denom     <- pi.2 * W.mat.2 + (1 / var.2) * X.sqr.pi #
+	# beta.2.denom.inv <- solve(beta.2.denom)#
+	# #beta.2.denom.inv <- ginv(beta.2.denom)#
+	# # Build the numerator of the first group#
+	# X.y      <- matrix(0, ncol = p, nrow = 1)#
+	# for (i in seq(1, n)){#
+	  # X.y.temp <- X[i, -1] * Y[i]#
+	  # X.y      <- X.y + w.2[i] *  X.y.temp#
+	# }#
+	# beta.2.numer <- as.numeric((1 / var.2) * X.y) #
+	# # Update beta.2#
+	# beta.2.m <- beta.2#
+	# beta.2   <- beta.2.denom.inv %*% beta.2.numer#
+	# # ------------------------------------------------------------------------------#
+	# # Update the weights given the betas#
+	# # ------------------------------------------------------------------------------#
+	# w.1   <- ((pi.1)  * dnorm(Y, mu.1, sqrt(var.1))) / #
+	         # (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+	         # ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+	# w.2   <- ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))) / #
+	         # (((pi.1) * dnorm(Y, mu.1, sqrt(var.1))) + #
+	         # ((pi.2)  * dnorm(Y, mu.2, sqrt(var.2))))#
+	#beta.1 <- c(5, beta.1)#
+	#beta.2 <- c(-5, beta.2)#
+	# ------------------------------------------------------------------------------#
+	# Go back to step 1 #
+	# ------------------------------------------------------------------------------#
+	#plot(density(X %*% beta.1), lwd = 2,  col = "blue")#
+	#lines(density(X %*% beta.2), lwd = 2, col = "pink")#
+	#lines(density(pi.1 * (X %*% beta.1) + pi.2 * (X %*% beta.2)), lwd = 2, col = "yellow")#
+	#lines(density(Y), lwd = 2, col = "green")#
+	#plot(density(Y), lwd = 2, col = "green")#
+	#print(c(pi.1, pi.2, var.1, var.2))#
+}
+plot(density(c(sample(mu.1, 40), sample(mu.2, 60))), col = "green", ylim <- c(0, 0.1))
+plot(pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + #
+	           pi.2  * dnorm(Y, mu.2, sqrt(var.2)), col = "green", ylim <- c(0, 0.1))
+pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + #
+	           pi.2  * dnorm(Y, mu.2, sqrt(var.2))
+plot(density(pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + #
+	           pi.2  * dnorm(Y, mu.2, sqrt(var.2))), col = "green", ylim <- c(0, 0.1))
+pi.1
+pi.2
+(var.2
+pi.2  * dnorm(Y, mu.2, sqrt(var.2)))
+pi.2  * dnorm(Y, mu.2, sqrt(var.2))
+lines(density(Y), col = "blue")
+plot(Y, (pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + #
+	             pi.2  * dnorm(Y, mu.2, sqrt(var.2))), col = "green", ylim <- c(0, 0.1))
+pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2)
+pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2))
+plot(Y, pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2)), #
+	     col = "green", ylim <- c(0, 0.1))
+Y
+pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2))
+plot(Y, (pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2))), #
+	     col = "green", ylim <- c(0, 0.1))
+mix <- (pi.1  * dnorm(Y, mu.1, sqrt(var.1)) + pi.2  * dnorm(Y, mu.2, sqrt(var.2)))
+plot(Y, mix, col = "green", ylim = c(0, 0.1))
+lines(density(Y), col = "blue")
+beta.1
+beta.2
+round(beta.2)
+abs(beta.1[-1])
+1/10e6
+0.05/1e-07
+0.05/1e07
+0.05/10e06
+10/3
+X <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/X.csv")
+X
+X <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/X.csv", header = F)
+X
+rm(list = ls())#
+X <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/X.csv", header = F)#
+Y <- read.csv("~/Dropbox/Post_Doc_QBI/Fin_Mix_Reg/Cpp/Y.csv", header = F)
+# Uses module Coordinate Descent from above#
+# Defines variables and memory#
+# Integers#
+# Doubles#
+X_mat = X#
+Y_mat = Y#
+CDLasso <- function(X_mat, Y_mat, lambda)#
+{#
+CRITERION = 10e-5#
+EPSILON   = 10e-8#
+A <- 0.0 #
+B <- 0.0 #
+C <- 0.0 #
+DL2 <- 0.0#
+LAMBDA <- lambda#
+L2 <- 0.0 #
+OBJECTIVE <- 0.0#
+PENALTY <- 0.0#
+NEW_OBJECTIVE <- 0.0#
+LEFT_L2 <- 0.0#
+LEFT_OBJECTIVE <- 0.0#
+LEFT_PENALTY <- 0.0#
+LEFT_ROOT <- 0.0#
+RIGHT_L2 <- 0.0#
+RIGHT_OBJECTIVE <- 0.0 #
+RIGHT_PENALTY <- 0.0#
+RIGHT_ROOT <- 0.0#
+Y <- Y_mat#
+M <- length(Y)#
+# Add a columns of ones fro the intercept#
+X <- cbind(array(1, M), X_mat)#
+N <- dim(X)[2]#
+# Array to store the beta estimates#
+ESTIMATE <- array(0,   N)#
+# Residual vectors for left and right derivatives#
+SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
+LEFT_R        <- matrix(, nrow = M, ncol = 1)#
+R             <- matrix(, nrow = M, ncol = 1)#
+RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
+# Initialise the number of cases M and the number of predictors N#
+# ------------------------------------------------------------------------------#
+# Initialise the residual vector and the penalty#
+# ------------------------------------------------------------------------------#
+R <- Y#
+if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
+PENALTY = 0#
+for (i in seq(2, N))#
+{#
+	A = ESTIMATE[i]#
+	B = abs(A)#
+	if (B > 0) {#
+		R = R - A * X[, i]     # Update the residual for each estimate#
+		PENALTY = PENALTY + B  # Update the penalty#
+	}#
+}#
+# ------------------------------------------------------------------------------#
+# Initialise the objective funtion and penalty. This is for the check on the#
+# objective function. #
+# ------------------------------------------------------------------------------#
+L2 <- sum(R ^ 2)             # Sum of the residuals#
+PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
+OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
+# ------------------------------------------------------------------------------#
+# Start the main loop. When we read in X the first column must be a vector of 1s#
+# ------------------------------------------------------------------------------#
+for (ITERATION in seq(1, 1000))#
+{#
+  # Update the intercept#
+  # --------------------#
+  A = ESTIMATE[1]#
+  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
+  R = R + A - ESTIMATE[1]       # Residual update of the mean#
+  # Update the other regression coefficients#
+  # ----------------------------------------#
+  for (i in seq(2, N))#
+  {#
+  	#i = 2#
+  	DL2 = -sum(R * X[, i])#
+  	A = ESTIMATE[i]#
+  	B = abs(A)#
+  	# Go to the next update if the directional derivatives are both positive#
+  	if (B < EPSILON)#
+  	{#
+  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
+  	  {#
+  	    next	  #
+  	  }#
+  	}#
+  	# Find the root to the right of 0#
+  	# -------------------------------#
+  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
+  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	RIGHT_L2   = 0.0#
+  	C = A - RIGHT_ROOT#
+  	# Update the residuals to the right#
+  	for (j in seq(1, M))#
+  	{#
+        RIGHT_R[j] <- R[j] + C * X[j, i]#
+        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
+  	}#
+  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
+  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
+  	# Find the root to the left of 0#
+  	# -------------------------------#
+  	LEFT_ROOT = min(A - (DL2 - LAMBDA) / SUM_X_SQUARES[i], 0)#
+  	LEFT_L2   = 0.0#
+  	C = A - LEFT_ROOT#
+  	for (j in seq(1, M))#
+  	{#
+        LEFT_R[j] <- R[j] + C * X[j, i]#
+        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
+  	}#
+  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
+  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
+  	# Choose between the two roots#
+  	# ----------------------------#
+  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
+  	{#
+  	  R           = RIGHT_R#
+  	  ESTIMATE[i] = RIGHT_ROOT#
+  	  L2          = RIGHT_L2#
+  	  PENALTY     = RIGHT_PENALTY#
+  	} else#
+  	{#
+  	  R           = LEFT_R#
+  	  ESTIMATE[i] = LEFT_ROOT#
+  	  L2          = LEFT_L2#
+  	  PENALTY     = LEFT_PENALTY	#
+  	}#
+  }#
+  NEW_OBJECTIVE = L2 / 2 + PENALTY#
+  # Check for descent failure or convergence. If neither occurs,#
+  # record the new value of the objective function#
+  if (NEW_OBJECTIVE > OBJECTIVE)#
+  {#
+  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
+  	break#
+  }#
+  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
+  {#
+  	print("***We Have convergence***")#
+  	break#
+  } else #
+  {#
+  	OBJECTIVE = NEW_OBJECTIVE#
+  	print(NEW_OBJECTIVE)#
+  }#
+}#
+#
+return(ESTIMATE)#
+}
+n <- dim(X)[1]
+n
+k = 6
+no.each.fold <- n / k
+no.each.fold
+no.each.fold <- floor(n / k)
+no.each.fold
+mse <- array(0, k)
+mse
 i
-# ==============================================================================#
-# Attempts to translate Lange's CD code from Fortran#
-# ==============================================================================#
-# ------------------------------------------------------------------------------#
-# Simulated data with many more predictors than individuals#
-# ------------------------------------------------------------------------------#
-n <- 500#
-p <- 2000#
-nz <- c(1:5)#
-true.beta     <- rep(0, p)#
-true.beta[nz] <- c(1, 1, 1, 1, 1)#
-X <- matrix(rnorm(n * p), n, p)#
-Y <- X %*% true.beta#
-rownames(X) <- 1:nrow(X)#
-colnames(X) <- 1:ncol(X)#
-# ------------------------------------------------------------------------------#
-# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
-# ------------------------------------------------------------------------------#
-# Uses module Coordinate Descent from above#
-# Defines variables and memory#
-# Integers#
-# Doubles#
-CRITERION = 10e-5#
-EPSILON   = 10e-8#
-A <- 0.0 #
-B <- 0.0 #
-C <- 0.0 #
-DL2 <- 0.0#
-LAMBDA <- 2#
-L2 <- 0.0 #
-OBJECTIVE <- 0.0#
-PENALTY <- 0.0#
-NEW_OBJECTIVE <- 0.0#
-LEFT_L2 <- 0.0#
-LEFT_OBJECTIVE <- 0.0#
-LEFT_PENALTY <- 0.0#
-LEFT_ROOT <- 0.0#
-RIGHT_L2 <- 0.0#
-RIGHT_OBJECTIVE <- 0.0 #
-RIGHT_PENALTY <- 0.0#
-RIGHT_ROOT <- 0.0#
-M <- length(Y)#
-# Add a columns of ones fro the intercept#
-X <- cbind(array(1, M), X)#
-N <- dim(X)[2]#
-# Array to store the beta estimates#
-ESTIMATE <- array(0,   N)#
-# Residual vectors for left and right derivatives#
-SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
-LEFT_R        <- matrix(, nrow = M, ncol = 1)#
-R             <- matrix(, nrow = M, ncol = 1)#
-RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
-# Initialise the number of cases M and the number of predictors N#
-# ------------------------------------------------------------------------------#
-# Initialise the residual vector and the penalty#
-# ------------------------------------------------------------------------------#
-R <- Y#
-if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
-PENALTY = 0#
-for (i in seq(2, N))#
-{#
-	A = ESTIMATE[i]#
-	B = abs(A)#
-	if (B > 0) {#
-		R = R - A * X[, i]     # Update the residual for each estimate#
-		PENALTY = PENALTY + B  # Update the penalty#
-	}#
-}#
-# ------------------------------------------------------------------------------#
-# Initialise the objective funtion and penalty. This is for the check on the#
-# objective function. #
-# ------------------------------------------------------------------------------#
-L2 <- sum(R ^ 2)             # Sum of the residuals#
-PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
-OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
-# ------------------------------------------------------------------------------#
-# Start the main loop. When we read in X the first column must be a vector of 1s#
-# ------------------------------------------------------------------------------#
-for (ITERATION in seq(1, 1000))#
-{#
-  # Update the intercept#
-  # --------------------#
-  A = ESTIMATE[1]#
-  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
-  R = R + A - ESTIMATE[1]       # Residual update of the mean#
-  # Update the other regression coefficients#
-  # ----------------------------------------#
-  for (i in seq(2, N))#
-  {#
-  	#i = 1#
-  	DL2 = -sum(R * X[, i])#
-  	A = ESTIMATE[i]#
-  	B = abs(A)#
-  	# Go to the next update if the directional derivatives are both positive#
-  	if (B < EPSILON)#
-  	{#
-  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
-  	  {#
-  	    next	  #
-  	  }#
-  	}#
-  	# Find the root to the right of 0#
-  	# -------------------------------#
-  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
-  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
-  	RIGHT_L2   = 0.0#
-  	C = A - RIGHT_ROOT#
-  	# Update the residuals to the right#
-  	for (j in seq(1, M))#
-  	{#
-        RIGHT_R[j] <- R[j] + C * X[j, i]#
-        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
-  	}#
-  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
-  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
-  	# Find the root to the left of 0#
-  	# -------------------------------#
-  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
-  	LEFT_L2   = 0.0#
-  	C = A - LEFT_ROOT#
-  	for (j in seq(1, M))#
-  	{#
-        LEFT_R[j] <- R[j] + C * X[j, i]#
-        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
-  	}#
-  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
-  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
-  	# Choose between the two roots#
-  	# ----------------------------#
-  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
-  	{#
-  	  R           = RIGHT_R#
-  	  ESTIMATE[i] = RIGHT_ROOT#
-  	  L2          = RIGHT_L2#
-  	  PENALTY     = RIGHT_PENALTY#
-  	} else#
-  	{#
-  	  R           = LEFT_R#
-  	  ESTIMATE[i] = LEFT_ROOT#
-  	  L2          = LEFT_L2#
-  	  PENALTY     = LEFT_PENALTY	#
-  	}#
-  }#
-  NEW_OBJECTIVE = L2 / 2 + PENALTY#
-  # Check for descent failure or convergence. If neither occurs,#
-  # record the new value of the objective function#
-  if (NEW_OBJECTIVE > OBJECTIVE)#
-  {#
-  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
-  	break#
-  }#
-  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
-  {#
-  	stop("***We Have convergence***")#
-  } else #
-  {#
-  	OBJECTIVE = NEW_OBJECTIVE#
-  	print(NEW_OBJECTIVE)#
-  }#
-}#
-ESTIMATE
-i
-j
-# ==============================================================================#
-# Attempts to translate Lange's CD code from Fortran#
-# ==============================================================================#
-# ------------------------------------------------------------------------------#
-# Simulated data with many more predictors than individuals#
-# ------------------------------------------------------------------------------#
-n <- 500#
-p <- 2000#
-nz <- c(1:5)#
-true.beta     <- rep(0, p)#
-true.beta[nz] <- c(1, 1, 1, 1, 1)#
-X <- matrix(rnorm(n * p), n, p)#
-Y <- X %*% true.beta#
-rownames(X) <- 1:nrow(X)#
-colnames(X) <- 1:ncol(X)#
-# ------------------------------------------------------------------------------#
-# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
-# ------------------------------------------------------------------------------#
-# Uses module Coordinate Descent from above#
-# Defines variables and memory#
-# Integers#
-# Doubles#
-CRITERION = 10e-5#
-EPSILON   = 10e-8#
-A <- 0.0 #
-B <- 0.0 #
-C <- 0.0 #
-DL2 <- 0.0#
-LAMBDA <- 2#
-L2 <- 0.0 #
-OBJECTIVE <- 0.0#
-PENALTY <- 0.0#
-NEW_OBJECTIVE <- 0.0#
-LEFT_L2 <- 0.0#
-LEFT_OBJECTIVE <- 0.0#
-LEFT_PENALTY <- 0.0#
-LEFT_ROOT <- 0.0#
-RIGHT_L2 <- 0.0#
-RIGHT_OBJECTIVE <- 0.0 #
-RIGHT_PENALTY <- 0.0#
-RIGHT_ROOT <- 0.0#
-M <- length(Y)#
-# Add a columns of ones fro the intercept#
-X <- cbind(array(1, M), X)#
-N <- dim(X)[2]#
-# Array to store the beta estimates#
-ESTIMATE <- array(0,   N)#
-# Residual vectors for left and right derivatives#
-SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
-LEFT_R        <- matrix(, nrow = M, ncol = 1)#
-R             <- matrix(, nrow = M, ncol = 1)#
-RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
-# Initialise the number of cases M and the number of predictors N#
-# ------------------------------------------------------------------------------#
-# Initialise the residual vector and the penalty#
-# ------------------------------------------------------------------------------#
-R <- Y#
-if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
-PENALTY = 0#
-for (i in seq(2, N))#
-{#
-	A = ESTIMATE[i]#
-	B = abs(A)#
-	if (B > 0) {#
-		R = R - A * X[, i]     # Update the residual for each estimate#
-		PENALTY = PENALTY + B  # Update the penalty#
-	}#
-}#
-# ------------------------------------------------------------------------------#
-# Initialise the objective funtion and penalty. This is for the check on the#
-# objective function. #
-# ------------------------------------------------------------------------------#
-L2 <- sum(R ^ 2)             # Sum of the residuals#
-PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
-OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
-# ------------------------------------------------------------------------------#
-# Start the main loop. When we read in X the first column must be a vector of 1s#
-# ------------------------------------------------------------------------------#
-for (ITERATION in seq(1, 1000))#
-{#
-  # Update the intercept#
-  # --------------------#
-  A = ESTIMATE[1]#
-  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
-  R = R + A - ESTIMATE[1]       # Residual update of the mean#
-  # Update the other regression coefficients#
-  # ----------------------------------------#
-  bum <- 10#
-  for (i in seq(2, N))#
-  {#
-  	#i = 1#
-  	DL2 = -sum(R * X[, i])#
-  	A = ESTIMATE[i]#
-  	B = abs(A)#
-  	# Go to the next update if the directional derivatives are both positive#
-  	if (B < EPSILON)#
-  	{#
-  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
-  	  {#
-  	    next	  #
-  	  }#
-  	}#
-  	# Find the root to the right of 0#
-  	# -------------------------------#
-  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
-  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
-  	RIGHT_L2   = 0.0#
-  	C = A - RIGHT_ROOT#
-  	# Update the residuals to the right#
-  	for (j in seq(1, M))#
-  	{#
-        RIGHT_R[j] <- R[j] + C * X[j, i]#
-        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
-  	}#
-  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
-  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
-  	# Find the root to the left of 0#
-  	# -------------------------------#
-  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
-  	LEFT_L2   = 0.0#
-  	C = A - LEFT_ROOT#
-  	for (j in seq(1, M))#
-  	{#
-        LEFT_R[j] <- R[j] + C * X[j, i]#
-        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
-  	}#
-  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
-  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
-  	# Choose between the two roots#
-  	# ----------------------------#
-  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
-  	{#
-  	  R           = RIGHT_R#
-  	  ESTIMATE[i] = RIGHT_ROOT#
-  	  L2          = RIGHT_L2#
-  	  PENALTY     = RIGHT_PENALTY#
-  	} else#
-  	{#
-  	  R           = LEFT_R#
-  	  ESTIMATE[i] = LEFT_ROOT#
-  	  L2          = LEFT_L2#
-  	  PENALTY     = LEFT_PENALTY	#
-  	}#
-  }#
-  NEW_OBJECTIVE = L2 / 2 + PENALTY#
-  # Check for descent failure or convergence. If neither occurs,#
-  # record the new value of the objective function#
-  if (NEW_OBJECTIVE > OBJECTIVE)#
-  {#
-  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
-  	break#
-  }#
-  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
-  {#
-  	stop("***We Have convergence***")#
-  } else #
-  {#
-  	OBJECTIVE = NEW_OBJECTIVE#
-  	print(NEW_OBJECTIVE)#
-  }#
-}#
-ESTIMATE
-bum
-# ==============================================================================#
-# Attempts to translate Lange's CD code from Fortran#
-# ==============================================================================#
-# ------------------------------------------------------------------------------#
-# Simulated data with many more predictors than individuals#
-# ------------------------------------------------------------------------------#
-n <- 500#
-p <- 2000#
-nz <- c(1:5)#
-true.beta     <- rep(0, p)#
-true.beta[nz] <- c(1, 1, 1, 1, 1)#
-X <- matrix(rnorm(n * p), n, p)#
-Y <- X %*% true.beta#
-rownames(X) <- 1:nrow(X)#
-colnames(X) <- 1:ncol(X)#
-# ------------------------------------------------------------------------------#
-# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
-# ------------------------------------------------------------------------------#
-# Uses module Coordinate Descent from above#
-# Defines variables and memory#
-# Integers#
-# Doubles#
-CRITERION = 10e-5#
-EPSILON   = 10e-8#
-A <- 0.0 #
-B <- 0.0 #
-C <- 0.0 #
-DL2 <- 0.0#
-LAMBDA <- 2#
-L2 <- 0.0 #
-OBJECTIVE <- 0.0#
-PENALTY <- 0.0#
-NEW_OBJECTIVE <- 0.0#
-LEFT_L2 <- 0.0#
-LEFT_OBJECTIVE <- 0.0#
-LEFT_PENALTY <- 0.0#
-LEFT_ROOT <- 0.0#
-RIGHT_L2 <- 0.0#
-RIGHT_OBJECTIVE <- 0.0 #
-RIGHT_PENALTY <- 0.0#
-RIGHT_ROOT <- 0.0#
-M <- length(Y)#
-# Add a columns of ones fro the intercept#
-X <- cbind(array(1, M), X)#
-N <- dim(X)[2]#
-# Array to store the beta estimates#
-ESTIMATE <- array(0,   N)#
-# Residual vectors for left and right derivatives#
-SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
-LEFT_R        <- matrix(, nrow = M, ncol = 1)#
-R             <- matrix(, nrow = M, ncol = 1)#
-RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
-# Initialise the number of cases M and the number of predictors N#
-# ------------------------------------------------------------------------------#
-# Initialise the residual vector and the penalty#
-# ------------------------------------------------------------------------------#
-R <- Y#
-if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
-PENALTY = 0#
-for (i in seq(2, N))#
-{#
-	A = ESTIMATE[i]#
-	B = abs(A)#
-	if (B > 0) {#
-		R = R - A * X[, i]     # Update the residual for each estimate#
-		PENALTY = PENALTY + B  # Update the penalty#
-	}#
-}#
-# ------------------------------------------------------------------------------#
-# Initialise the objective funtion and penalty. This is for the check on the#
-# objective function. #
-# ------------------------------------------------------------------------------#
-L2 <- sum(R ^ 2)             # Sum of the residuals#
-PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
-OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
-# ------------------------------------------------------------------------------#
-# Start the main loop. When we read in X the first column must be a vector of 1s#
-# ------------------------------------------------------------------------------#
-for (ITERATION in seq(1, 1000))#
-{#
-  # Update the intercept#
-  # --------------------#
-  A = ESTIMATE[1]#
-  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
-  R = R + A - ESTIMATE[1]       # Residual update of the mean#
-  # Update the other regression coefficients#
-  # ----------------------------------------#
-  for (i in seq(2, N))#
-  {#
-  	#i = 1#
-  	DL2 = -sum(R * X[, i])#
-  	A = ESTIMATE[i]#
-  	B = abs(A)#
-  	# Go to the next update if the directional derivatives are both positive#
-  	if (B < EPSILON)#
-  	{#
-  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
-  	  {#
-  	    next	  #
-  	  }#
-  	}#
-  	# Find the root to the right of 0#
-  	# -------------------------------#
-  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
-  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
-  	RIGHT_L2   = 0.0#
-  	C = A - RIGHT_ROOT#
-  	# Update the residuals to the right#
-  	for (j in seq(1, M))#
-  	{#
-        RIGHT_R[j] <- R[j] + C * X[j, i]#
-        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
-  	}#
-  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
-  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
-  	# Find the root to the left of 0#
-  	# -------------------------------#
-  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
-  	LEFT_L2   = 0.0#
-  	C = A - LEFT_ROOT#
-  	for (j in seq(1, M))#
-  	{#
-        LEFT_R[j] <- R[j] + C * X[j, i]#
-        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
-  	}#
-  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
-  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
-  	# Choose between the two roots#
-  	# ----------------------------#
-  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
-  	{#
-  	  R           = RIGHT_R#
-  	  ESTIMATE[i] = RIGHT_ROOT#
-  	  L2          = RIGHT_L2#
-  	  PENALTY     = RIGHT_PENALTY#
-  	} else#
-  	{#
-  	  R           = LEFT_R#
-  	  ESTIMATE[i] = LEFT_ROOT#
-  	  L2          = LEFT_L2#
-  	  PENALTY     = LEFT_PENALTY	#
-  	}#
-  }#
-  NEW_OBJECTIVE = L2 / 2 + PENALTY#
-  # Check for descent failure or convergence. If neither occurs,#
-  # record the new value of the objective function#
-  if (NEW_OBJECTIVE > OBJECTIVE)#
-  {#
-  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
-  	break#
-  }#
-  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
-  {#
-  	stop("***We Have convergence***")#
-  } else #
-  {#
-  	OBJECTIVE = NEW_OBJECTIVE#
-  	print(NEW_OBJECTIVE)#
-  }#
-}#
-ESTIMATE
-true.beta[nz] <- array(1, length(nx))
-true.beta[nz] <- array(1, length(nz))
-# ==============================================================================#
-# Attempts to translate Lange's CD code from Fortran#
-# ==============================================================================#
-# ------------------------------------------------------------------------------#
-# Simulated data with many more predictors than individuals#
-# ------------------------------------------------------------------------------#
-n <- 500#
-p <- 2000#
-nz <- c(1:100)#
-true.beta     <- rep(0, p)#
-true.beta[nz] <- array(1, length(nz))#
-X <- matrix(rnorm(n * p), n, p)#
-Y <- X %*% true.beta#
-rownames(X) <- 1:nrow(X)#
-colnames(X) <- 1:ncol(X)#
-# ------------------------------------------------------------------------------#
-# Subroutine LASSO_PENALISED_L2_REGRESSION translated#
-# ------------------------------------------------------------------------------#
-# Uses module Coordinate Descent from above#
-# Defines variables and memory#
-# Integers#
-# Doubles#
-CRITERION = 10e-5#
-EPSILON   = 10e-8#
-A <- 0.0 #
-B <- 0.0 #
-C <- 0.0 #
-DL2 <- 0.0#
-LAMBDA <- 2#
-L2 <- 0.0 #
-OBJECTIVE <- 0.0#
-PENALTY <- 0.0#
-NEW_OBJECTIVE <- 0.0#
-LEFT_L2 <- 0.0#
-LEFT_OBJECTIVE <- 0.0#
-LEFT_PENALTY <- 0.0#
-LEFT_ROOT <- 0.0#
-RIGHT_L2 <- 0.0#
-RIGHT_OBJECTIVE <- 0.0 #
-RIGHT_PENALTY <- 0.0#
-RIGHT_ROOT <- 0.0#
-M <- length(Y)#
-# Add a columns of ones fro the intercept#
-X <- cbind(array(1, M), X)#
-N <- dim(X)[2]#
-# Array to store the beta estimates#
-ESTIMATE <- array(0,   N)#
-# Residual vectors for left and right derivatives#
-SUM_X_SQUARES <- matrix(0, nrow =  N, ncol = 1)#
-LEFT_R        <- matrix(, nrow = M, ncol = 1)#
-R             <- matrix(, nrow = M, ncol = 1)#
-RIGHT_R       <- matrix(, nrow = M, ncol = 1)#
-# Initialise the number of cases M and the number of predictors N#
-# ------------------------------------------------------------------------------#
-# Initialise the residual vector and the penalty#
-# ------------------------------------------------------------------------------#
-R <- Y#
-if (abs(ESTIMATE[1] > 0)) { R = R - ESTIMATE[1]} # Adjust for the mean#
-PENALTY = 0#
-for (i in seq(2, N))#
-{#
-	A = ESTIMATE[i]#
-	B = abs(A)#
-	if (B > 0) {#
-		R = R - A * X[, i]     # Update the residual for each estimate#
-		PENALTY = PENALTY + B  # Update the penalty#
-	}#
-}#
-# ------------------------------------------------------------------------------#
-# Initialise the objective funtion and penalty. This is for the check on the#
-# objective function. #
-# ------------------------------------------------------------------------------#
-L2 <- sum(R ^ 2)             # Sum of the residuals#
-PENALTY = LAMBDA * PENALTY   # Lambda times the sum of the penalty#
-OBJECTIVE = L2 / 2 + PENALTY # Objective is the sum of squares plut the penalty#
-# ------------------------------------------------------------------------------#
-# Start the main loop. When we read in X the first column must be a vector of 1s#
-# ------------------------------------------------------------------------------#
-for (ITERATION in seq(1, 1000))#
-{#
-  # Update the intercept#
-  # --------------------#
-  A = ESTIMATE[1]#
-  ESTIMATE[1] = A + sum(R) / M  # There is a double negative accounted for here#
-  R = R + A - ESTIMATE[1]       # Residual update of the mean#
-  # Update the other regression coefficients#
-  # ----------------------------------------#
-  for (i in seq(2, N))#
-  {#
-  	#i = 1#
-  	DL2 = -sum(R * X[, i])#
-  	A = ESTIMATE[i]#
-  	B = abs(A)#
-  	# Go to the next update if the directional derivatives are both positive#
-  	if (B < EPSILON)#
-  	{#
-  	  if (DL2 + LAMBDA >= 0 & -DL2 + LAMBDA >= 0)#
-  	  {#
-  	    next	  #
-  	  }#
-  	}#
-  	# Find the root to the right of 0#
-  	# -------------------------------#
-  	if (SUM_X_SQUARES[i] <= 0) {SUM_X_SQUARES[i] = sum(X[, i] ^ 2)}#
-  	RIGHT_ROOT = max(A - (DL2 + LAMBDA) / SUM_X_SQUARES[i], 0)#
-  	RIGHT_L2   = 0.0#
-  	C = A - RIGHT_ROOT#
-  	# Update the residuals to the right#
-  	for (j in seq(1, M))#
-  	{#
-        RIGHT_R[j] <- R[j] + C * X[j, i]#
-        RIGHT_L2   <- RIGHT_L2 + RIGHT_R[j] ^ 2#
-  	}#
-  	RIGHT_PENALTY   = PENALTY + LAMBDA * (RIGHT_ROOT - B)#
-  	RIGHT_OBJECTIVE = RIGHT_L2 / 2 + RIGHT_PENALTY#
-  	# Find the root to the left of 0#
-  	# -------------------------------#
-  	LEFT_ROOT = min(A - (DL2 - LAMBDA)/SUM_X_SQUARES[i], 0)#
-  	LEFT_L2   = 0.0#
-  	C = A - LEFT_ROOT#
-  	for (j in seq(1, M))#
-  	{#
-        LEFT_R[j] <- R[j] + C * X[j, i]#
-        LEFT_L2   <- LEFT_L2 + LEFT_R[j] ^ 2#
-  	}#
-  	LEFT_PENALTY   = PENALTY + LAMBDA * (abs(LEFT_ROOT) - B)#
-  	LEFT_OBJECTIVE = LEFT_L2 / 2 + LEFT_PENALTY#
-  	# Choose between the two roots#
-  	# ----------------------------#
-  	if (RIGHT_OBJECTIVE <= LEFT_OBJECTIVE)#
-  	{#
-  	  R           = RIGHT_R#
-  	  ESTIMATE[i] = RIGHT_ROOT#
-  	  L2          = RIGHT_L2#
-  	  PENALTY     = RIGHT_PENALTY#
-  	} else#
-  	{#
-  	  R           = LEFT_R#
-  	  ESTIMATE[i] = LEFT_ROOT#
-  	  L2          = LEFT_L2#
-  	  PENALTY     = LEFT_PENALTY	#
-  	}#
-  }#
-  NEW_OBJECTIVE = L2 / 2 + PENALTY#
-  # Check for descent failure or convergence. If neither occurs,#
-  # record the new value of the objective function#
-  if (NEW_OBJECTIVE > OBJECTIVE)#
-  {#
-  	stop("*** ERROR *** OBJECTIVE FUNCTION INCREASE")#
-  	break#
-  }#
-  if (OBJECTIVE - NEW_OBJECTIVE < CRITERION)#
-  {#
-  	stop("***We Have convergence***")#
-  } else #
-  {#
-  	OBJECTIVE = NEW_OBJECTIVE#
-  	print(NEW_OBJECTIVE)#
-  }#
-}#
-ESTIMATE
+k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+i = 1
+i = 0
+k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+k.elem
+i = k - 1
+k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)
+k.elem
+i = k - 1#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  if ( i = k - 1) { k.elem <- seq(i * no.each.fold + 1, n) }
+i = k - 1#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  if ( i = (k - 1)) { k.elem <- seq(i * no.each.fold + 1, n) }
+i = k - 1#
+	  k.elem <- seq(i * no.each.fold + 1, (i + 1) * no.each.fold)#
+	  if ( i == (k - 1)) #
+	  { #
+	  	k.elem <- seq(i * no.each.fold + 1, n) #
+	  }
+k.elem
