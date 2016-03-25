@@ -1,0 +1,2303 @@
+Number of command line arguments 15
+Argument 0 = ../../lmlr
+Argument 1 = /Users/hayleywise/Dropbox/Git_Repos/LMLR/examples/simulation/sim_x.csv
+Argument 2 = /Users/hayleywise/Dropbox/Git_Repos/LMLR/examples/simulation/sim_y.csv
+Argument 3 = 10
+Argument 4 = 60
+Argument 5 = 1e-4
+Argument 6 = 500000
+Argument 7 = 1e-16
+Argument 8 = 2.2
+Argument 9 = 2.1
+Argument 10 = -10
+Argument 11 = 10
+Argument 12 = 0.6
+Argument 13 = 0.4
+Argument 14 = /Users/hayleywise/Dropbox/Git_Repos/LMLR/examples/simulation/
+File input took 0.032257 seconds
+You are in lasso mode
+You are in non lasso mode
+1611.42
+1040.58
+1026.67
+1021.28
+1018.65
+1017.2
+1016.36
+1015.84
+1015.52
+1015.3
+1015.16
+1015.06
+1014.99
+1014.95
+1014.91
+1014.89
+You are in lasso mode
+You are in non lasso mode
+1372.13
+898.345
+887.266
+884.929
+884.343
+884.183
+884.136
+BIC at initial end points 29.0983,1014.89 40.9017,884.136
+You are in lasso mode
+You are in non lasso mode
+1785.12
+Bounds at iteration 1 are (29.0983,60)
+BIC bounds at iteration 1 are (884.136,1785.12)
+You are in lasso mode
+You are in non lasso mode
+1449.8
+946.327
+937.8
+935.894
+935.285
+935.055
+934.958
+934.914
+Bounds at iteration 2 are (29.0983,48.1966)
+BIC bounds at iteration 2 are (934.914,884.136)
+You are in lasso mode
+You are in non lasso mode
+1343.24
+893.173
+877.963
+874.6
+873.766
+873.548
+873.489
+Bounds at iteration 3 are (36.3932,48.1966)
+BIC bounds at iteration 3 are (884.136,873.489)
+You are in lasso mode
+You are in non lasso mode
+1323.73
+891.184
+871.459
+866.924
+865.782
+865.48
+865.398
+Bounds at iteration 4 are (40.9017,48.1966)
+BIC bounds at iteration 4 are (873.489,865.398)
+You are in lasso mode
+You are in non lasso mode
+1319.14
+897.824
+874.13
+868.643
+867.272
+866.914
+866.818
+Bounds at iteration 5 are (43.6881,48.1966)
+BIC bounds at iteration 5 are (865.398,866.818)
+You are in lasso mode
+You are in non lasso mode
+1325.27
+889.855
+873.504
+869.729
+868.769
+868.513
+868.443
+Bounds at iteration 6 are (43.6881,46.4745)
+BIC bounds at iteration 6 are (868.443,865.398)
+You are in lasso mode
+You are in non lasso mode
+1320.08
+894.668
+875.495
+871.133
+870.042
+869.755
+869.677
+Bounds at iteration 7 are (44.7524,46.4745)
+BIC bounds at iteration 7 are (865.398,869.677)
+You are in lasso mode
+You are in non lasso mode
+1322.22
+889.398
+871.034
+866.815
+865.753
+865.472
+865.396
+Bounds at iteration 8 are (44.7524,45.8167)
+BIC bounds at iteration 8 are (865.396,865.398)
+You are in lasso mode
+You are in non lasso mode
+1321.25
+888.284
+870.767
+866.747
+865.735
+865.467
+865.394
+Bounds at iteration 9 are (44.7524,45.4102)
+BIC bounds at iteration 9 are (865.394,865.396)
+You are in lasso mode
+You are in non lasso mode
+1320.73
+887.696
+870.627
+866.711
+865.725
+865.465
+865.393
+Bounds at iteration 10 are (44.7524,45.1589)
+BIC bounds at iteration 10 are (865.393,865.394)
+You are in lasso mode
+You are in non lasso mode
+1320.43
+887.358
+870.546
+866.691
+865.72
+865.463
+865.393
+Bounds at iteration 11 are (44.7524,45.0037)
+BIC bounds at iteration 11 are (865.393,865.393)
+You are in lasso mode
+You are in non lasso mode
+1320.25
+887.162
+870.499
+866.679
+865.717
+865.462
+865.393
+Bounds at iteration 12 are (44.7524,44.9077)
+BIC bounds at iteration 12 are (865.393,865.393)
+You are in lasso mode
+You are in non lasso mode
+1325.44
+890.041
+873.548
+869.74
+868.772
+868.514
+868.443
+Bounds at iteration 13 are (44.7524,44.8484)
+BIC bounds at iteration 13 are (868.443,865.393)
+Estimate of minimum Golden search lambda 1 44.8004
+You are in lasso mode
+You are in non lasso mode
+1325.49
+890.104
+873.563
+869.744
+868.773
+868.514
+868.443
+Minimum Golden search BIC 868.443
+Estimate of minimum Golden search lambda 44.8004
+46.5154
+45.3004
+44.3004
+47.5654
+44.3004
+45.3004
+You are in lasso mode
+You are in non lasso mode
+1335.06
+903.397
+874.81
+867.814
+866.021
+865.545
+865.416
+You are in lasso mode
+You are in non lasso mode
+1785.12
+You are in lasso mode
+You are in non lasso mode
+1320.51
+889.345
+872.606
+868.912
+868.001
+867.767
+867.706
+The xs are 021
+Difference is 4.48004
+You are in lasso mode
+You are in non lasso mode
+1386.65
+933.424
+894.639
+884.139
+881.37
+880.633
+880.433
+880.377
+The fxr is? 880.377
+You are in lasso mode
+You are in non lasso mode
+1300.8
+889.675
+872.64
+868.987
+868.138
+867.93
+867.877
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 0
+You are in lasso mode
+You are in non lasso mode
+1335.06
+903.397
+874.81
+867.814
+866.021
+865.545
+865.416
+You are in lasso mode
+You are in non lasso mode
+1300.8
+889.675
+872.64
+868.987
+868.138
+867.93
+867.877
+You are in lasso mode
+You are in non lasso mode
+1320.51
+889.345
+872.606
+868.912
+868.001
+867.767
+867.706
+The xs are 021
+Difference is 1.68627
+You are in lasso mode
+You are in non lasso mode
+1350.13
+906.487
+883.238
+877.549
+876.081
+875.691
+875.585
+The fxr is? 875.585
+You are in lasso mode
+You are in non lasso mode
+1312.64
+890.308
+872.174
+868.132
+867.136
+866.877
+866.808
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 1
+You are in lasso mode
+You are in non lasso mode
+1335.06
+903.397
+874.81
+867.814
+866.021
+865.545
+865.416
+You are in lasso mode
+You are in non lasso mode
+1312.64
+890.308
+872.174
+868.132
+867.136
+866.877
+866.808
+You are in lasso mode
+You are in non lasso mode
+1320.51
+889.345
+872.606
+868.912
+868.001
+867.767
+867.706
+The xs are 012
+Difference is 0.843133
+You are in lasso mode
+You are in non lasso mode
+1335.91
+915.486
+879.249
+870.008
+867.638
+867.013
+866.845
+866.799
+The fxr is? 866.799
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 2
+You are in lasso mode
+You are in non lasso mode
+1335.06
+903.397
+874.81
+867.814
+866.021
+865.545
+865.416
+You are in lasso mode
+You are in non lasso mode
+1312.64
+890.308
+872.174
+868.132
+867.136
+866.877
+866.808
+You are in lasso mode
+You are in non lasso mode
+1335.91
+915.486
+879.249
+870.008
+867.638
+867.013
+866.845
+866.799
+The xs are 021
+Difference is 3.61191
+You are in lasso mode
+You are in non lasso mode
+1368.22
+938.257
+885.851
+870.798
+866.819
+865.76
+865.474
+865.395
+The fxr is? 865.395
+You are in lasso mode
+Objective difference -0.000386644
+*** ERROR *** OBJECTIVE FUNCTION INCREASE
+You are in non lasso mode
+1421.4
+971.209
+907.896
+887.82
+882.346
+880.89
+880.501
+880.395
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 3
+You are in lasso mode
+You are in non lasso mode
+1335.06
+903.397
+874.81
+867.814
+866.021
+865.545
+865.416
+You are in lasso mode
+You are in non lasso mode
+1368.22
+938.257
+885.851
+870.798
+866.819
+865.76
+865.474
+865.395
+You are in lasso mode
+You are in non lasso mode
+1335.91
+915.486
+879.249
+870.008
+867.638
+867.013
+866.845
+866.799
+The xs are 102
+Difference is 4.16566
+You are in lasso mode
+You are in non lasso mode
+1375.53
+934.594
+888.594
+875.835
+872.464
+871.569
+871.329
+871.264
+The fxr is? 871.264
+You are in lasso mode
+You are in non lasso mode
+1346.37
+923.194
+883.6
+873.275
+870.617
+869.912
+869.721
+869.668
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 4
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1368.22
+938.257
+885.851
+870.798
+866.819
+865.76
+865.474
+865.395
+You are in lasso mode
+You are in non lasso mode
+1359.22
+929.742
+882.715
+869.93
+866.588
+865.699
+865.457
+865.391
+The xs are 021
+Difference is 2.08283
+You are in lasso mode
+You are in non lasso mode
+1336.16
+912.148
+880.31
+872.402
+870.383
+869.848
+869.703
+The fxr is? 869.703
+You are in lasso mode
+You are in non lasso mode
+1363.44
+933.68
+884.147
+870.326
+866.693
+865.727
+865.465
+865.393
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 5
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1363.44
+933.68
+884.147
+870.326
+866.693
+865.727
+865.465
+865.393
+You are in lasso mode
+You are in non lasso mode
+1359.22
+929.742
+882.715
+869.93
+866.588
+865.699
+865.457
+865.391
+The xs are 021
+Difference is 0.520708
+You are in lasso mode
+You are in non lasso mode
+1345.12
+921.717
+883.164
+873.16
+870.586
+869.904
+869.718
+869.667
+The fxr is? 869.667
+You are in lasso mode
+You are in non lasso mode
+1359.93
+929.997
+882.882
+869.979
+866.601
+865.702
+865.458
+865.391
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 6
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1359.93
+929.997
+882.882
+869.979
+866.601
+865.702
+865.458
+865.391
+You are in lasso mode
+You are in non lasso mode
+1359.22
+929.742
+882.715
+869.93
+866.588
+865.699
+865.457
+865.391
+The xs are 021
+Difference is 0.260354
+You are in lasso mode
+You are in non lasso mode
+1353.93
+924.016
+880.862
+869.428
+866.454
+865.662
+865.448
+865.388
+The fxr is? 865.388
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 7
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1353.93
+924.016
+880.862
+869.428
+866.454
+865.662
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1359.22
+929.742
+882.715
+869.93
+866.588
+865.699
+865.457
+865.391
+The xs are 012
+Difference is 0.520708
+You are in lasso mode
+You are in non lasso mode
+1347.93
+917
+878.78
+868.872
+866.305
+865.622
+865.436
+865.385
+The fxr is? 865.385
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 8
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1353.93
+924.016
+880.862
+869.428
+866.454
+865.662
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 201
+Difference is 1.85586
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+The fxr is? 865.383
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 9
+You are in lasso mode
+You are in non lasso mode
+1354.38
+923.977
+880.931
+869.45
+866.459
+865.664
+865.448
+865.388
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 210
+Difference is 1.47671
+You are in lasso mode
+You are in non lasso mode
+1342.72
+900.409
+878.382
+873.099
+871.739
+871.376
+871.278
+The fxr is? 871.278
+You are in lasso mode
+You are in non lasso mode
+1349.13
+918.182
+879.157
+868.974
+866.332
+865.629
+865.438
+865.386
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 10
+You are in lasso mode
+You are in non lasso mode
+1349.13
+918.182
+879.157
+868.974
+866.332
+865.629
+865.438
+865.386
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 210
+Difference is 0.618619
+You are in lasso mode
+You are in non lasso mode
+1347.19
+905.201
+879.676
+873.441
+871.83
+871.401
+871.284
+The fxr is? 871.284
+You are in lasso mode
+You are in non lasso mode
+1346.64
+915.493
+878.354
+868.759
+866.274
+865.613
+865.434
+865.385
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 11
+You are in lasso mode
+You are in non lasso mode
+1346.64
+915.493
+878.354
+868.759
+866.274
+865.613
+865.434
+865.385
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 210
+Difference is 0.309309
+You are in lasso mode
+You are in non lasso mode
+1340.8
+906.276
+878.017
+870.924
+869.088
+868.599
+868.466
+The fxr is? 868.466
+You are in lasso mode
+You are in non lasso mode
+1345.34
+914.089
+877.94
+868.649
+866.245
+865.605
+865.432
+865.384
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 12
+You are in lasso mode
+You are in non lasso mode
+1345.34
+914.089
+877.94
+868.649
+866.245
+865.605
+865.432
+865.384
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 210
+Difference is 0.154655
+You are in lasso mode
+You are in non lasso mode
+1340.65
+908.916
+876.471
+868.26
+866.141
+865.577
+865.424
+865.382
+The fxr is? 865.382
+You are in lasso mode
+You are in non lasso mode
+1340.8
+906.276
+878.017
+870.924
+869.088
+868.599
+868.466
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 13
+You are in lasso mode
+You are in non lasso mode
+1340.65
+908.916
+876.471
+868.26
+866.141
+865.577
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1344.09
+912.558
+877.529
+868.542
+866.216
+865.598
+865.43
+865.383
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 021
+Difference is 0.309309
+You are in lasso mode
+You are in non lasso mode
+1340.25
+908.787
+876.373
+868.231
+866.133
+865.575
+865.424
+865.382
+The fxr is? 865.382
+You are in lasso mode
+You are in non lasso mode
+1337.85
+906.309
+875.649
+868.037
+866.081
+865.561
+865.42
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 14
+You are in lasso mode
+You are in non lasso mode
+1340.65
+908.916
+876.471
+868.26
+866.141
+865.577
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1340.25
+908.787
+876.373
+868.231
+866.133
+865.575
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1342.81
+911.464
+877.156
+868.44
+866.189
+865.59
+865.428
+865.383
+The xs are 102
+Difference is 0.348719
+You are in lasso mode
+You are in non lasso mode
+1335.77
+903.645
+874.999
+867.871
+866.037
+865.549
+865.416
+The fxr is? 865.416
+You are in lasso mode
+You are in non lasso mode
+1342.09
+910.681
+876.932
+868.38
+866.173
+865.586
+865.427
+865.383
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 15
+You are in lasso mode
+You are in non lasso mode
+1340.65
+908.916
+876.471
+868.26
+866.141
+865.577
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1340.25
+908.787
+876.373
+868.231
+866.133
+865.575
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1342.09
+910.681
+876.932
+868.38
+866.173
+865.586
+865.427
+865.383
+The xs are 102
+Difference is 0.0773274
+You are in lasso mode
+You are in non lasso mode
+1339.68
+908.011
+876.185
+868.183
+866.12
+865.572
+865.423
+865.382
+The fxr is? 865.382
+You are in lasso mode
+You are in non lasso mode
+1335.77
+903.645
+874.999
+867.871
+866.037
+865.549
+865.416
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 16
+You are in lasso mode
+You are in non lasso mode
+1340.65
+908.916
+876.471
+868.26
+866.141
+865.577
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1340.25
+908.787
+876.373
+868.231
+866.133
+865.575
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1339.68
+908.011
+876.185
+868.183
+866.12
+865.572
+865.423
+865.382
+The xs are 210
+Difference is 0.154655
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1336.43
+904.831
+875.221
+867.923
+866.05
+865.553
+865.418
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 17
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1340.25
+908.787
+876.373
+868.231
+866.133
+865.575
+865.424
+865.382
+You are in lasso mode
+You are in non lasso mode
+1339.68
+908.011
+876.185
+868.183
+866.12
+865.572
+865.423
+865.382
+The xs are 021
+Difference is 0.320054
+You are in lasso mode
+You are in non lasso mode
+1338.15
+906.459
+875.728
+868.061
+866.087
+865.563
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1339.88
+908.38
+876.258
+868.2
+866.125
+865.573
+865.423
+865.382
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 18
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1339.88
+908.38
+876.258
+868.2
+866.125
+865.573
+865.423
+865.382
+You are in lasso mode
+You are in non lasso mode
+1339.68
+908.011
+876.185
+868.183
+866.12
+865.572
+865.423
+865.382
+The xs are 021
+Difference is 0.0386637
+You are in lasso mode
+You are in non lasso mode
+1338.93
+907.334
+875.967
+868.124
+866.104
+865.567
+865.422
+865.381
+The fxr is? 865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 19
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.93
+907.334
+875.967
+868.124
+866.104
+865.567
+865.422
+865.381
+You are in lasso mode
+You are in non lasso mode
+1339.68
+908.011
+876.185
+868.183
+866.12
+865.572
+865.423
+865.382
+The xs are 012
+Difference is 0.0773274
+You are in lasso mode
+You are in non lasso mode
+1336.98
+905.398
+875.387
+867.968
+866.062
+865.556
+865.419
+The fxr is? 865.419
+You are in lasso mode
+You are in non lasso mode
+1339.53
+907.965
+876.149
+868.172
+866.117
+865.571
+865.423
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 20
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.93
+907.334
+875.967
+868.124
+866.104
+865.567
+865.422
+865.381
+You are in lasso mode
+You are in non lasso mode
+1339.53
+907.965
+876.149
+868.172
+866.117
+865.571
+865.423
+865.381
+The xs are 012
+Difference is 0.0764304
+You are in lasso mode
+You are in non lasso mode
+1337.89
+906.333
+875.66
+868.041
+866.082
+865.561
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1339.17
+907.62
+876.043
+868.143
+866.109
+865.569
+865.422
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 21
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.93
+907.334
+875.967
+868.124
+866.104
+865.567
+865.422
+865.381
+You are in lasso mode
+You are in non lasso mode
+1339.17
+907.62
+876.043
+868.143
+866.109
+865.569
+865.422
+865.381
+The xs are 012
+Difference is 0.0382152
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1337.89
+906.333
+875.66
+868.041
+866.082
+865.561
+865.42
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 22
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.93
+907.334
+875.967
+868.124
+866.104
+865.567
+865.422
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.0764304
+You are in lasso mode
+You are in non lasso mode
+1337.55
+906.009
+875.558
+868.013
+866.074
+865.559
+865.419
+The fxr is? 865.419
+You are in lasso mode
+You are in non lasso mode
+1338.72
+907.168
+875.909
+868.108
+866.1
+865.566
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 23
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.72
+907.168
+875.909
+868.108
+866.1
+865.566
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.0507086
+You are in lasso mode
+You are in non lasso mode
+1337.98
+906.442
+875.687
+868.048
+866.084
+865.562
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1338.56
+907.011
+875.86
+868.094
+866.096
+865.565
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 24
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.56
+907.011
+875.86
+868.094
+866.096
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.0253543
+You are in lasso mode
+You are in non lasso mode
+1338.19
+906.648
+875.749
+868.064
+866.088
+865.563
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1338.47
+906.924
+875.833
+868.087
+866.094
+865.565
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 25
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.47
+906.924
+875.833
+868.087
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.0126771
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1338.19
+906.648
+875.749
+868.064
+866.088
+865.563
+865.42
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 26
+You are in lasso mode
+You are in non lasso mode
+1338.43
+906.899
+875.822
+868.084
+866.094
+865.565
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 120
+Difference is 0.0253543
+You are in lasso mode
+You are in non lasso mode
+1338.19
+906.63
+875.749
+868.065
+866.088
+865.563
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1338.36
+906.821
+875.801
+868.078
+866.092
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 27
+You are in lasso mode
+You are in non lasso mode
+1338.36
+906.821
+875.801
+868.078
+866.092
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 120
+Difference is 0.00963431
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.708
+875.77
+868.07
+866.09
+865.564
+865.421
+The fxr is? 865.421
+You are in lasso mode
+You are in non lasso mode
+1338.34
+906.804
+875.796
+868.077
+866.092
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 28
+You are in lasso mode
+You are in non lasso mode
+1338.34
+906.804
+875.796
+868.077
+866.092
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 120
+Difference is 0.00481715
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.708
+875.77
+868.07
+866.09
+865.564
+865.421
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 29
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.33
+906.776
+875.791
+868.076
+866.091
+865.564
+865.421
+865.381
+The xs are 012
+Difference is 0.00963431
+You are in lasso mode
+You are in non lasso mode
+1338.22
+906.681
+875.759
+868.067
+866.089
+865.563
+865.42
+The fxr is? 865.42
+You are in lasso mode
+You are in non lasso mode
+1338.31
+906.758
+875.784
+868.074
+866.091
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 30
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.31
+906.758
+875.784
+868.074
+866.091
+865.564
+865.421
+865.381
+The xs are 012
+Difference is 0.00995144
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1338.22
+906.681
+875.759
+868.067
+866.089
+865.563
+865.42
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 31
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.29
+906.753
+875.781
+868.073
+866.091
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.0199029
+You are in lasso mode
+You are in non lasso mode
+1338.24
+906.693
+875.766
+868.069
+866.09
+865.564
+865.421
+The fxr is? 865.421
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.738
+875.777
+868.072
+866.09
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 32
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.738
+875.777
+868.072
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The xs are 201
+Difference is 0.00489644
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.708
+875.77
+868.07
+866.09
+865.564
+865.421
+The fxr is? 865.421
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.72
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 33
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.726
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.72
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The xs are 210
+Difference is 0.00244822
+You are in lasso mode
+You are in non lasso mode
+1338.23
+906.694
+875.763
+868.068
+866.089
+865.563
+865.421
+The fxr is? 865.421
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.718
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 34
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.718
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.72
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The xs are 021
+Difference is 0.00803599
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.719
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1338.24
+906.697
+875.765
+868.069
+866.089
+865.563
+865.421
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 35
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.718
+875.772
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.719
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.721
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+The xs are 102
+Difference is 0.00313955
+You are in lasso mode
+You are in non lasso mode
+1338.28
+906.737
+875.778
+868.072
+866.09
+865.564
+865.421
+865.381
+The fxr is? 865.381
+You are in lasso mode
+You are in non lasso mode
+1338.27
+906.725
+875.773
+868.071
+866.09
+865.564
+865.421
+865.381
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 36
+You are in lasso mode
+You are in non lasso mode
+1338.27
+906.729
+875.775
+868.071
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.26
+906.719
+875.771
+868.07
+866.09
+865.564
+865.421
+865.381
+You are in lasso mode
+You are in non lasso mode
+1338.25
+906.709
+875.768
+868.07
+866.09
+865.564
+865.421
+The xs are 102
+You are in lasso mode
+You are in non lasso mode
+Lasso vector is
+        0
+        0
+
+Mean  vector is
+  -10.0000
+   10.0000
+
+Sigma vector is
+   2.2000
+   2.1000
+
+Pi    vector is
+   0.6000
+   0.4000
+
+Size of X is 200 by 100
+Size of Y is 200 by 1
+Size of X is 200 by 100
+Size of beta is 100 by 2
+Initial objective 1 -4868.56
+Initial objective 2 -4868.56
+Objective difference at iteration 0	1e+21
+1338.26
+Objective difference at iteration 100	0.288649
+906.719
+Objective difference at iteration 200	0.0715469
+875.771
+Objective difference at iteration 300	0.0181162
+868.07
+Objective difference at iteration 400	0.00476145
+866.09
+Objective difference at iteration 500	0.00128396
+865.564
+Objective difference at iteration 600	0.000352937
+865.421
+Objective difference at iteration 700	9.87524e-05
+865.381
+We have convergence
+Objective at convergence -371.76
+Betas
+   5.1589        0
+   4.9579        0
+   5.1083        0
+   4.9556        0
+   4.9785        0
+        0   5.0226
+        0   4.9170
+        0   4.8013
+        0   4.8509
+        0   4.7173
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0  -0.1151
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0   0.1844
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0  -0.2164
+        0        0
+        0   0.0821
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0  -0.1638
+        0   0.2126
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0  -0.1141
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+
+Sigmas
+   0.8217
+   0.4453
+
+Alphas
+  -19.9359
+   20.0182
+
+Pis
+   0.5008
+   0.4992
+
+Minimum simplex BIC 865.381
+Best simplex lambda vector is (46.5811, 45.1039)
+Time to estimate lasso parameters was 200.803 seconds
