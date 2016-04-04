@@ -54,14 +54,13 @@ int main(int argc, char* argv[])
     // ----------------------------------------------------------
     // Print the header
     // ----------------------------------------------------------
-    cout << "                      +-----------------------------+" << endl;
-    cout << "                      |                             |" << endl;
-    cout << "                      |   LMLR, v1.0                |" << endl;
-    cout << "                      |   April, 2016               |" << endl;
-    cout << "                      |   Luke Lloyd-Jones          |" << endl;
-    cout << "                      |                             |" << endl;
-    cout << "                      +-----------------------------+" << endl;
-    cout << endl;
+    cout << "          +--------------------------------------------------+" << endl;
+    cout << "          |                                                  |" << endl;
+    cout << "          | LMLR, v1.0                                       |" << endl;
+    cout << "          | (C) 2016 Luke Lloyd-Jones and Hien Nguyen        |" << endl;
+    cout << "          | GNU General Public License v3                    |" << endl;
+    cout << "          |                                                  |" << endl;
+    cout << "          +--------------------------------------------------+" << endl;
     // ----------------------------------------------------------
     // Print the arguments that have been passed
     // ----------------------------------------------------------
