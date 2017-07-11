@@ -1,0 +1,930 @@
+Number of command line arguments 16
+Argument 0 = ../../lmlr
+Argument 1 = sim1_geno.csv
+Argument 2 = sim1_pheno.csv
+Argument 3 = 1
+Argument 4 = 80
+Argument 5 = 1e-4
+Argument 6 = 500000
+Argument 7 = 1e-16
+Argument 8 = out/sim_
+Argument 9 = betas_str_1.txt
+Argument 10 = 1.5
+Argument 11 = 2.2
+Argument 12 = -10
+Argument 13 = 10
+Argument 14 = 0.48
+Argument 15 = 0.52
+Number of dists 2 seconds
+File input took 0.00735 seconds
+You are in lasso mode
+You are in non lasso mode
+Lasso vector is
+        0
+        0
+
+Mean  vector is
+  -10.0000
+   10.0000
+
+Sigma vector is
+   1.5000
+   2.2000
+
+Pi    vector is
+   0.4800
+   0.5200
+
+Size of X is 200 by 20
+Size of Y is 200 by 1
+Size of X is 200 by 20
+Size of beta is 20 by 2
+Initial objective 1 -5874.59
+Initial objective 2 -5874.59
+Objective difference at iteration 0	1e+21
+947.985
+We have convergence
+Objective at convergence -430.22
+Betas
+   2.1381        0
+  -0.9984        0
+   2.0360        0
+        0        0
+        0  -1.9248
+        0   1.8539
+        0  -0.9675
+   0.1779        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+
+Sigmas
+   1.0691
+   1.1649
+
+Alphas
+  -20.1447
+   19.9671
+
+Pis
+   0.4000
+   0.6000
+
+You are in lasso mode
+You are in non lasso mode
+Lasso vector is
+        0
+        0
+
+Mean  vector is
+  -10.0000
+   10.0000
+
+Sigma vector is
+   1.5000
+   2.2000
+
+Pi    vector is
+   0.4800
+   0.5200
+
+Size of X is 200 by 20
+Size of Y is 200 by 1
+Size of X is 200 by 20
+Size of beta is 20 by 2
+Initial objective 1 -6190.48
+Initial objective 2 -6190.48
+Objective difference at iteration 0	1e+21
+1332.19
+Objective difference at iteration 100	0.00198048
+1029.99
+We have convergence
+Objective at convergence -488.485
+Betas
+   2.3312        0
+        0        0
+   1.9281        0
+        0        0
+        0  -1.9997
+        0   1.8383
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+
+Sigmas
+   2.0654
+   1.9832
+
+Alphas
+  -20.0209
+   19.9523
+
+Pis
+   0.4000
+   0.6000
+
+BIC at initial end points 31.1753,947.985 49.8247,1029.99
+You are in lasso mode
+You are in non lasso mode
+956.892
+Bounds at iteration 1 are (1,49.8247)
+BIC bounds at iteration 1 are (956.892,947.985)
+You are in lasso mode
+You are in non lasso mode
+1173.75
+1103.77
+Bounds at iteration 2 are (19.6494,49.8247)
+BIC bounds at iteration 2 are (947.985,1103.77)
+You are in lasso mode
+You are in non lasso mode
+947.576
+Bounds at iteration 3 are (19.6494,38.2987)
+BIC bounds at iteration 3 are (947.576,947.985)
+You are in lasso mode
+You are in non lasso mode
+953.309
+Bounds at iteration 4 are (19.6494,31.1753)
+BIC bounds at iteration 4 are (953.309,947.576)
+You are in lasso mode
+You are in non lasso mode
+944.426
+Bounds at iteration 5 are (24.0519,31.1753)
+BIC bounds at iteration 5 are (947.576,944.426)
+You are in lasso mode
+You are in non lasso mode
+945.723
+Bounds at iteration 6 are (26.7728,31.1753)
+BIC bounds at iteration 6 are (944.426,945.723)
+You are in lasso mode
+You are in non lasso mode
+948.758
+932.136
+Bounds at iteration 7 are (26.7728,29.4937)
+BIC bounds at iteration 7 are (932.136,944.426)
+You are in lasso mode
+You are in non lasso mode
+948.301
+Bounds at iteration 8 are (26.7728,28.4544)
+BIC bounds at iteration 8 are (948.301,932.136)
+You are in lasso mode
+You are in non lasso mode
+949.046
+932.136
+Bounds at iteration 9 are (27.4151,28.4544)
+BIC bounds at iteration 9 are (932.136,932.136)
+You are in lasso mode
+You are in non lasso mode
+948.58
+Bounds at iteration 10 are (27.4151,28.0574)
+BIC bounds at iteration 10 are (948.58,932.136)
+You are in lasso mode
+You are in non lasso mode
+948.864
+932.136
+Bounds at iteration 11 are (27.6605,28.0574)
+BIC bounds at iteration 11 are (932.136,932.136)
+You are in lasso mode
+You are in non lasso mode
+948.685
+932.136
+Bounds at iteration 12 are (27.6605,27.9058)
+BIC bounds at iteration 12 are (932.136,932.136)
+You are in lasso mode
+You are in non lasso mode
+948.64
+Bounds at iteration 13 are (27.6605,27.8121)
+BIC bounds at iteration 13 are (948.64,932.136)
+You are in lasso mode
+You are in non lasso mode
+948.713
+932.136
+Bounds at iteration 14 are (27.7184,27.8121)
+BIC bounds at iteration 14 are (932.136,932.136)
+Estimate of minimum Golden search lambda 1 27.7652
+You are in lasso mode
+You are in non lasso mode
+Lasso vector is
+        0
+        0
+
+Mean  vector is
+  -10.0000
+   10.0000
+
+Sigma vector is
+   1.5000
+   2.2000
+
+Pi    vector is
+   0.4800
+   0.5200
+
+Size of X is 200 by 20
+Size of Y is 200 by 1
+Size of X is 200 by 20
+Size of beta is 20 by 2
+Initial objective 1 -5877.12
+Initial objective 2 -5877.12
+Objective difference at iteration 0	1e+21
+948.699
+Objective difference at iteration 100	9.24644e-05
+932.136
+We have convergence
+Objective at convergence -428.98
+Betas
+   2.1172        0
+  -1.0204        0
+   2.0479        0
+        0        0
+        0  -1.9254
+        0   1.8548
+        0  -0.9680
+   0.1732        0
+        0        0
+        0        0
+  -0.1795        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+
+Sigmas
+   1.0365
+   1.1649
+
+Alphas
+  -20.1399
+   19.9672
+
+Pis
+   0.4000
+   0.6000
+
+You are in lasso mode
+Minimum Golden search BIC 932.136
+Estimate of minimum Golden search lambda 27.7652
+28.6285
+28.2652
+27.2652
+29.6785
+27.2652
+28.2652
+You are in lasso mode
+You are in non lasso mode
+948.818
+932.136
+You are in lasso mode
+You are in non lasso mode
+949.266
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 201
+Difference is 2.77652
+You are in lasso mode
+You are in non lasso mode
+948.339
+The fxr is? 948.339
+You are in lasso mode
+You are in non lasso mode
+948.895
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 0
+You are in lasso mode
+You are in non lasso mode
+948.818
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.895
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 210
+Difference is 1.04745
+You are in lasso mode
+You are in non lasso mode
+948.663
+The fxr is? 948.663
+You are in lasso mode
+You are in non lasso mode
+948.726
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 1
+You are in lasso mode
+You are in non lasso mode
+948.726
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.895
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 201
+Difference is 0.773085
+You are in lasso mode
+You are in non lasso mode
+948.655
+The fxr is? 948.655
+You are in lasso mode
+You are in non lasso mode
+948.724
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 2
+You are in lasso mode
+You are in non lasso mode
+948.726
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.724
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 210
+Difference is 0.330452
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+The fxr is? 932.136
+You are in lasso mode
+You are in non lasso mode
+948.533
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 3
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.724
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 021
+Difference is 1.21572
+You are in lasso mode
+You are in non lasso mode
+948.397
+The fxr is? 948.397
+You are in lasso mode
+You are in non lasso mode
+948.704
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 4
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.704
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 021
+Difference is 0.425772
+You are in lasso mode
+You are in non lasso mode
+948.606
+The fxr is? 948.606
+You are in lasso mode
+You are in non lasso mode
+948.695
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 5
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.695
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 021
+Difference is 0.212886
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+The fxr is? 932.136
+You are in lasso mode
+You are in non lasso mode
+948.606
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 6
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.686
+932.136
+The xs are 102
+Difference is 0.425772
+You are in lasso mode
+You are in non lasso mode
+948.626
+The fxr is? 948.626
+You are in lasso mode
+You are in non lasso mode
+948.683
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 7
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.683
+932.136
+The xs are 102
+Difference is 0.251916
+You are in lasso mode
+You are in non lasso mode
+948.665
+The fxr is? 948.665
+You are in lasso mode
+You are in non lasso mode
+948.681
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 8
+You are in lasso mode
+You are in non lasso mode
+948.684
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.681
+932.136
+The xs are 120
+Difference is 0.125958
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+The fxr is? 932.136
+You are in lasso mode
+You are in non lasso mode
+948.637
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 9
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.681
+932.136
+The xs are 012
+Difference is 0.491086
+You are in lasso mode
+You are in non lasso mode
+948.636
+The fxr is? 948.636
+You are in lasso mode
+You are in non lasso mode
+948.677
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 10
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.677
+932.136
+The xs are 012
+Difference is 0.0606246
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The fxr is? 932.136
+You are in lasso mode
+You are in non lasso mode
+948.636
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 11
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.675
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 201
+Difference is 0.121249
+You are in lasso mode
+You are in non lasso mode
+948.652
+The fxr is? 948.652
+You are in lasso mode
+You are in non lasso mode
+948.673
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 12
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.673
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 210
+Difference is 0.107823
+You are in lasso mode
+You are in non lasso mode
+948.657
+The fxr is? 948.657
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 13
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.673
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 201
+Difference is 0.0509712
+You are in lasso mode
+You are in non lasso mode
+948.655
+The fxr is? 948.655
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 14
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 210
+Difference is 0.0411688
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 15
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.672
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 201
+Difference is 0.0151934
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 16
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 210
+Difference is 0.0167861
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 17
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 201
+Difference is 0.00862919
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 18
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 210
+Difference is 0.00754299
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The fxr is? 932.136
+You are in lasso mode
+You are in non lasso mode
+948.655
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 19
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.671
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 021
+Difference is 0.0240536
+You are in lasso mode
+You are in non lasso mode
+948.655
+The fxr is? 948.655
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 20
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 021
+Difference is 0.00941101
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 21
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 021
+Difference is 0.0047055
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 22
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 021
+Difference is 0.00235275
+You are in lasso mode
+You are in non lasso mode
+948.656
+The fxr is? 948.656
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+COMPLETED ITERATION OF SIMPLEX ALGOIRTHM 23
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+You are in lasso mode
+You are in non lasso mode
+948.67
+932.136
+The xs are 012
+You are in lasso mode
+You are in non lasso mode
+Lasso vector is
+        0
+        0
+
+Mean  vector is
+  -10.0000
+   10.0000
+
+Sigma vector is
+   1.5000
+   2.2000
+
+Pi    vector is
+   0.4800
+   0.5200
+
+Size of X is 200 by 20
+Size of Y is 200 by 1
+Size of X is 200 by 20
+Size of beta is 20 by 2
+Initial objective 1 -5877.13
+Initial objective 2 -5877.13
+Objective difference at iteration 0	1e+21
+948.67
+Objective difference at iteration 100	9.22671e-05
+932.136
+We have convergence
+Objective at convergence -428.98
+Betas
+   2.1172        0
+  -1.0204        0
+   2.0479        0
+        0        0
+        0  -1.9254
+        0   1.8548
+        0  -0.9680
+   0.1732        0
+        0        0
+        0        0
+  -0.1795        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+        0        0
+
+Sigmas
+   1.0365
+   1.1649
+
+Alphas
+  -20.1399
+   19.9672
+
+Pis
+   0.4000
+   0.6000
+
+Minimum simplex BIC 932.136
+Best simplex lambda vector is    26.9793
+   28.1826
+
+Time to estimate lasso parameters was 3.92758 seconds

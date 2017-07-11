@@ -14,6 +14,8 @@ ifeq (${compiler},home)
       CC = g++-4.8
 else ifeq (${compiler},mpi)
       CC  = mpic++
+else ifeq (${compiler},work)
+      CC  = g++-6
 else
       CC = g++-4.9
 endif
@@ -27,6 +29,9 @@ endif
 ifeq (${compiler},home)
 	IARMA_PATH  = -I/usr/local/Cellar/armadillo/4.300.3/include
 	LARMA_PATH  = -L/usr/local/Cellar/armadillo/4.300.3/lib
+else ifeq (${compiler},work)
+	IARMA_PATH  = -I/Users/l.lloydjones/homebrew/Cellar/armadillo/7.400.2/include
+	LARMA_PATH  = -L/Users/l.lloydjones/homebrew/Cellar/armadillo/7.400.2/lib
 else 
 	IARMA_PATH  = -I/usr/local/Cellar/armadillo/5.000.1/include
 	LARMA_PATH  = -L/usr/local/Cellar/armadillo/5.000.1/lib
@@ -36,19 +41,23 @@ endif
 ifeq (${compiler},home)
 	IBOOST_PATH = -I/usr/local/Cellar/boost/1.55.0_2/include
 	LBOOST_PATH = -L/usr/local/Cellar/boost/1.55.0_2/lib
+else ifeq (${compiler},work)
+	IBOOST_PATH = -I/Users/l.lloydjones/homebrew/Cellar/boost/1.62.0/include
+	LBOOST_PATH = -L/Users/l.lloydjones/homebrew/Cellar/boost/1.62.0/lib
 else 
 	IBOOST_PATH = -I/usr/local/Cellar/boost/1.57.0/include
 	LBOOST_PATH = -L/usr/local/Cellar/boost/1.57.0/include
 endif
 
+
 # GSL
-ifeq (${compiler},home)
-	IGSL_PATH = -I/usr/local/Cellar/gsl/1.16/include
-	LGSL_PATH = -L/usr/local/Cellar/gsl/1.16/lib
-else 
-	IGSL_PATH = -I/usr/local/Cellar/gsl/1.16/include
-	LGSL_PATH = -L/usr/local/Cellar/gsl/1.16/lib
-endif
+#ifeq (${compiler},home)
+#	IGSL_PATH = -I/usr/local/Cellar/gsl/1.16/include
+#	LGSL_PATH = -L/usr/local/Cellar/gsl/1.16/lib
+#else 
+#	IGSL_PATH = -I/usr/local/Cellar/gsl/1.16/include
+#	LGSL_PATH = -L/usr/local/Cellar/gsl/1.16/lib
+#endif
 
 
 # —————————————————————————————————————————————————————————

@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------
 // Author: Luke Lloyd-Jones
 // Date started:      04/09/2015
-// Date last updated: 04/02/2016
+// Date last updated: 10/06/2017
 // ---------------------------------------------------------------------
 
 // ---------------------------------------------------------------------
@@ -19,7 +19,8 @@
 #include <cmath>
 #include <cassert>
 #include "fmr_lasso.hpp"
-
+#include "brent.cpp"
+using namespace brent;
 using namespace boost::math;
 using namespace arma;
 using namespace std;
@@ -61,14 +62,10 @@ FMRLasso::~FMRLasso()
 // coordinate descent lasso
 mat FMRLasso::FMRLassoRun(const mat& geno,
                           const mat& pheno,
-                          double sig1,
-                          double sig2,
-                          double mu_1,
-                          double mu_2,
-                          double pi1,
-                          double pi2,
-                          double lambda_in_1,
-                          double lambda_in_2,
+                          vec sigs,
+                          vec mus,
+                          vec pis,
+                          vec lambdas,
                           unsigned int maxit,
                           unsigned int mode,
                           const mat& beta_str,
@@ -86,6 +83,7 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
     // Initialise some elements
     maxit = maxit;
     mat beta_old(mP, mG, fill::zeros);
+    // cout << "Couting the beta" << beta_str << endl;
     mat beta = beta_str;
     // cout << X << endl;
     // cout << Y << endl;
@@ -97,21 +95,21 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
     // ---------------------------------------------------
     mat resid(mN, mG, fill::zeros);
     vec lambda;
-    // cout << "Betas after initialisation" << endl << beta << endl;
     if (mode == 0)
     {
         cout << "You are in lasso mode" << endl;
-        lambda = {lambda_in_1, lambda_in_2};
+        lambda = lambdas;
     }
     else
     {
         cout << "You are in non lasso mode" << endl;
-        lambda = {0.0, 0.0};
+        vec zvec(mG, fill::zeros);
+        lambda = zvec;
     }
-    vec alpha  = {mu_1, mu_2};
-    vec sig_2  = {sig1, sig2};
-    vec sig_2_old = {sig1, sig2};
-    vec pi     = {pi1, pi2};
+    vec alpha  = mus;
+    vec sig_2  = sigs;
+    vec sig_2_old = sigs;
+    vec pi     = pis;
     // cout << "Lasso vector is " << lambda << endl;
     // ---------------------------------------------------
     // Printing some elements to see how we are going
@@ -166,7 +164,8 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
     {
       for (unsigned int k = 0; k < mG; k++)
       {
-          // cout << "abs beta" << sum(abs(beta.row(k))) << endl;
+          //cout << "abs beta " << sum(abs(beta.row(k))) << endl;
+          //cout << "k " << k << endl;
           obj -= pi(k) * lambda(k) * sum(abs(beta.col(k)));
       }
     }
@@ -234,48 +233,65 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
         // -------------------------------------
         vec rho(mG);
         vec psi(mG);
-        double gamma_c1;
-        double gamma_c2;
-        double gamma_1;
-        double gamma_2;
         for (unsigned int k = 0; k < mG; k++)
         {
             rho(k) = sum(tau.row(k));
             psi(k) = lambda(k) * sum(abs(beta.col(k)));
         }
-        //cout << "rho "  <<  rho << endl;
-        //cout << "psi "  <<  psi << endl;
-        gamma_c1 = 0.5 * (sum(rho) + sum(psi));
-        gamma_c2 = 0.5 * sqrt(sum(rho % rho) + sum(psi % psi) +
-                              2 * rho(0) * rho(1) -
-                              2 * rho(0) * psi(1) +
-                              2 * rho(0) * psi(0) +
-                              2 * rho(1) * psi(1) -
-                              2 * rho(1) * psi(0) -
-                              2 * psi(0) * psi(1));
-        gamma_1 = gamma_c1 + gamma_c2;
-        gamma_2 = gamma_c1 - gamma_c2;
+         //        double gamma_c1;
+         //        double gamma_c2;
+         //        double gamma_1;
+         //        double gamma_2;
+//        //cout << "rho "  <<  rho << endl;
+//        //cout << "psi "  <<  psi << endl;
+//        gamma_c1 = 0.5 * (sum(rho) + sum(psi));
+//        gamma_c2 = 0.5 * sqrt(sum(rho % rho) + sum(psi % psi) +
+//                              2 * rho(0) * rho(1) -
+//                              2 * rho(0) * psi(1) +
+//                              2 * rho(0) * psi(0) +
+//                              2 * rho(1) * psi(1) -
+//                              2 * rho(1) * psi(0) -
+//                              2 * psi(0) * psi(1));
+//        gamma_1 = gamma_c1 + gamma_c2;
+//        gamma_2 = gamma_c1 - gamma_c2;
         //cout << "gamma 1 " << gamma_1 << endl;
         //cout << "gamma 2 " << gamma_2 << endl;
+        // ----------------------------------------------------------
+        // Find the solution to pi lagrangian using Brent's algorithm
+        // ----------------------------------------------------------
+        // Prelim definitions
+        double t; // Threshold
+        double result; // Result storage
+        t = r8_epsilon ( );
+        double b = 1e6; // max value
+        // Find the b_str minimum
+        double b_str;
+        b_str = -1 * min(psi);
+        result = zero_rc_pi_root (b_str, b, t, pi_root, mG, rho, psi, "pi_root" );
+        pi_brent =  (rho / (result + psi));
+        // cout << "Brent pi chosen " << pi_brent << endl;
+        pi = pi_brent;
+        // ----------------------------------------------------
         // Update the pis with the correct gamma solution
         // i.e., the one that gives the solution between (0, 1)
         // ----------------------------------------------------
-        vec pi_1(mG);
-        vec pi_2(mG);
-        for (unsigned int k = 0; k < mG; k++)
-        {
-            pi_1(k) = rho(k) / (gamma_1 - psi(k));
-            pi_2(k) = rho(k) / (gamma_2 - psi(k));
-        }
-        // cout << "pi1 and pi2 "  << pi_1 << "\t" << pi_2 << endl;
-        if ((max(pi_1) < 1) * (min(pi_1) > 0) == 1)
-        {
-            pi = pi_1;
-        } else
-        {
-            pi = pi_2;
-        }
-        // cout << "pi chosen " << pi << endl;
+//        vec pi_1(mG);
+//        vec pi_2(mG);
+//        for (unsigned int k = 0; k < mG; k++)
+//        {
+//            pi_1(k) = rho(k) / (gamma_1 - psi(k));
+//            pi_2(k) = rho(k) / (gamma_2 - psi(k));
+//        }
+//        // cout << "pi1 and pi2 "  << pi_1 << "\t" << pi_2 << endl;
+//        if ((max(pi_1) < 1) * (min(pi_1) > 0) == 1)
+//        {
+//            pi = pi_1;
+//        } else
+//        {
+//            pi = pi_2;
+//        }
+//        cout << "Analytical pi chosen " << pi << endl;
+        // ---------------------
         // Update the intercepts
         // ---------------------
         for (unsigned int k = 0; k < mG; k++)
@@ -290,6 +306,7 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
             
         }
         //cout << "alphas" << alpha << endl;
+        // ---------------------
         // Update the variances
         // ---------------------
         sig_2_old = sig_2;
@@ -309,6 +326,7 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
         }
         
         //cout << "sigmas " << sig_2  << endl;
+        // ------------------------------------
         // Update the taus given pis and sigmas
         // ------------------------------------
         for (unsigned int i = 0; i < mN; i++)
@@ -436,6 +454,7 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
                 cout << "Sigmas" << endl << sig_2  << endl;
                 cout << "Alphas" << endl << alpha  << endl;
                 cout << "Pis"    << endl << pi     << endl;
+                cout << "Pis Brent"    << endl << pi_brent     << endl;
             }
             cout << "Objective difference " << obj - old_obj << endl;
             cout << "*** ERROR *** OBJECTIVE FUNCTION INCREASE" << endl;
@@ -467,6 +486,7 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
         string sigma_out;
         string alpha_out;
         string pi_out;
+        string tau_out;
         // Sigmas
         cout << "Betas"  << endl << beta  << endl;
         beta_out = outpath + "beta_estimates.txt";
@@ -483,6 +503,9 @@ mat FMRLasso::FMRLassoRun(const mat& geno,
         cout << "Pis"    << endl << pi    << endl;
         pi_out = outpath + "pi_estimates.txt";
         pi.save(pi_out, csv_ascii);
+        // tau
+        tau_out = outpath + "tau_estimates.txt";
+        tau.save(tau_out, csv_ascii);
     }
     //cout << "Estimate in the loop are " << estimate << endl;
     return beta;
@@ -511,14 +534,11 @@ mat FMRLasso::GenoStd(mat& geno)
 
 double FMRLasso::BICRun(const mat& geno,
                         const mat& pheno,
-                        double sig_1,
-                        double sig_2,
-                        double mu_1,
-                        double mu_2,
-                        double pi_1,
-                        double pi_2,
-                        double lambda_in_1,
-                        double lambda_in_2,
+                        const mat& beta_str,
+                        vec sigs,
+                        vec mus,
+                        vec pis,
+                        vec lambdas,
                         double dists,
                         unsigned int maxit,
                         int verbose,
@@ -531,19 +551,19 @@ double FMRLasso::BICRun(const mat& geno,
     int no_active = geno.n_cols * dists;
     // Decalre the initial values for beta to be passed to the function
     // as warm sarts. Initially all betas are 0.01
-    mat beta_str(geno.n_cols, dists, fill::ones);
+    // mat beta_str(geno.n_cols, dists, fill::ones);
     // Initiate betas by a read in from the outpath
-    string beta_str_in;
-    beta_str_in = outpath + "betas_str.txt";
-    beta_str.load(beta_str_in, csv_ascii);
+    // string beta_str_in;
+    // beta_str_in = outpath + "betas_str.txt";
+    // beta_str.load(beta_str_in, csv_ascii);
     // cout << "Loaded betas" << endl << beta_str << endl;
     mat est_ind(geno.n_cols, dists, fill::zeros);
     // cout << sig_1 << endl;
     // ------------------------------------------
     // Run the penalised lasso
     // ------------------------------------------
-    est = FMRLassoRun(geno, pheno, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2,
-                      lambda_in_1, lambda_in_2, maxit, 0, beta_str, est_ind,
+    est = FMRLassoRun(geno, pheno, sigs, mus, pis,
+                      lambdas, maxit, 0, beta_str, est_ind,
                       &bic, no_active, 0, outpath);
     // Find which values of est that are greater than a threshold
     ActiveSet(est, est_ind, &no_not_active);
@@ -557,13 +577,13 @@ double FMRLasso::BICRun(const mat& geno,
     // ------------------------------------------
     if (verbose == 1)
     {
-        est = FMRLassoRun(geno, pheno, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2,
-                          lambda_in_1, lambda_in_2, maxit, 1, est, est_ind,
+        est = FMRLassoRun(geno, pheno, sigs, mus, pis,
+                          lambdas, maxit, 1, est, est_ind,
                           &bic, no_active, 1, outpath);
     } else
     {
-        FMRLassoRun(geno, pheno, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2,
-                    lambda_in_1, lambda_in_2, maxit, 1, est, est_ind,
+        FMRLassoRun(geno, pheno, sigs, mus, pis,
+                    lambdas, maxit, 1, est, est_ind,
                     &bic, no_active, 0, outpath);
     }
     return bic;
@@ -593,27 +613,24 @@ void FMRLasso::ActiveSet(mat& est, mat& est_ind, int* no_not_active)
 
 //// Nelder and Mead's simplex function
 //// ----------------------------------
-//
+
 std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial guess of the parameters
                                  double tol, //termination criteria
                                  int iterations,
                                  const mat& geno,
                                  const mat& pheno,
-                                 double sig_1,
-                                 double sig_2,
-                                 double mu_1,
-                                 double mu_2,
-                                 double pi_1,
-                                 double pi_2,
-                                 double lambda_in_1,
-                                 double lambda_in_2,
+                                 const mat& beta_update,
+                                 vec sigs,
+                                 vec mus,
+                                 vec pis,
+                                 vec lambdas,
                                  double dists,
                                  unsigned int maxit,
                                  int verbose,
                                  string outpath)
 {
     //iteration step number
-    unsigned int N = init.size();                         //space dimension
+    unsigned int N = init.size();                       //space dimension
     const double a = 1.0, b = 1.0, g = 0.5, h = 0.5;   //coefficients
     std::vector<std::vector<double> > x =  std::vector<std::vector<double> >(); //x: The Simplex
     //a: reflection  -> xr
@@ -648,7 +665,6 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
         std::transform(init.begin(), init.end(),
                        xcentroid_old.begin(), std::bind2nd(std::multiplies<double>(), N + 1) );
     }//constructing the simplex finished
-    cout << "Initial simplex is " << endl;
     cout << x[0].at(0) << endl;
     cout << x[0].at(1) << endl;
     cout << x[1].at(0) << endl;
@@ -660,17 +676,19 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
     {
         for (unsigned int i = 0; i < N + 1; ++i)
         {
+            vec lambdas_1(N);
+            for (unsigned int j = 0; j < N; j++)
+            {
+                lambdas_1(j) = x[i].at(j);
+            }
             // vf[i] = f(x[i]);
             vf[i] = BICRun(geno,
                            pheno,
-                           sig_1,
-                           sig_2,
-                           mu_1,
-                           mu_2,
-                           pi_1,
-                           pi_2,
-                           x[i].at(0),
-                           x[i].at(1),
+                           beta_update,
+                           sigs,
+                           mus,
+                           pis,
+                           lambdas_1,
                            dists,
                            maxit,
                            verbose,
@@ -697,7 +715,7 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
             }
         }
         //x1, xn, xnp1 are found
-        // cout << "The xs are " << x1 << xn << xnp1 << endl;
+        cout << "The xs are " << x1 << xn << xnp1 << endl;
         std::vector<double> xg(N, 0);//xg: centroid of the N best vertexes
         for(unsigned int i = 0; i < x.size(); ++i){
             if(i != xnp1)
@@ -732,7 +750,7 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
         {
             xcentroid_old.swap(xcentroid_new); //update simplex center
         }
-        cout << "Difference in objective at current iteration is " << diff << endl;
+        cout << "Difference is " << diff << endl;
         //reflection:
         std::vector<double> xr(N, 0);
         for(unsigned int i = 0; i < N; ++i)
@@ -740,22 +758,24 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
             xr[i] = xg[i] + a * (xg[i] - x[xnp1][i]);
         }
         //reflection, xr found
-        
+        vec lambdas_2(N);
+        for (unsigned int jj = 0; jj < N; jj++)
+        {
+            lambdas_2(jj) = xr.at(jj);
+        }
         double fxr = BICRun(geno,
                             pheno,
-                            sig_1,
-                            sig_2,
-                            mu_1,
-                            mu_2,
-                            pi_1,
-                            pi_2,
-                            xr.at(0),
-                            xr.at(1),
+                            beta_update,
+                            sigs,
+                            mus,
+                            pis,
+                            lambdas_2,
                             dists,
                             maxit,
                             verbose,
                             outpath);//record function at xr
-        // cout << "The fxr is? " << fxr << endl;
+        cout << "The fxr is? " << fxr << endl;
+        
         if(vf[x1] <= fxr && fxr <= vf[xn])
         {
             std::copy(xr.begin(), xr.end(), x[xnp1].begin());
@@ -767,16 +787,18 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
             {
                 xe[i] = xr[i] + b * (xr[i] - xg[i]);
             }
+            vec lambdas_3(N);
+            for (unsigned int jjj = 0; jjj < N; jjj++)
+            {
+                lambdas_3(jjj) = xe.at(jjj);
+            }
             double fxe = BICRun(geno,
                                 pheno,
-                                sig_1,
-                                sig_2,
-                                mu_1,
-                                mu_2,
-                                pi_1,
-                                pi_2,
-                                xe.at(0),
-                                xe.at(1),
+                                beta_update,
+                                sigs,
+                                mus,
+                                pis,
+                                lambdas_3,
                                 dists,
                                 maxit,
                                 verbose,
@@ -799,16 +821,18 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
             {
                 xc[i] = xg[i] + g * (x[xnp1][i] - xg[i]);
             }
+            vec lambdas_4(N);
+            for (unsigned int jjjj = 0; jjjj < N; jjjj++)
+            {
+                lambdas_4(jjjj) = xc.at(jjjj);
+            }
             double fxc = BICRun(geno,
                                 pheno,
-                                sig_1,
-                                sig_2,
-                                mu_1,
-                                mu_2,
-                                pi_1,
-                                pi_2,
-                                xc.at(0),
-                                xc.at(1),
+                                beta_update,
+                                sigs,
+                                mus,
+                                pis,
+                                lambdas_4,
                                 dists,
                                 maxit,
                                 verbose,
@@ -837,9 +861,9 @@ std::vector<double> FMRLasso::Simplex(std::vector<double> init,    //initial gue
 
     if (cnt == (iterations - 1))
     {//max number of iteration achieves before tol is satisfied
-        std::cout << "Iteration limit achieves, result may not be optimal" << std::endl;
+        std::cout << "Iteration limit achieved, result may not be optimal" << std::endl;
     }
-        cout << "COMPLETED RUNNING OF NELDER-MEAD SIMPLEX ALGOIRTHM " << cnt << endl;
+        cout << "COMPLETED ITERATION OF SIMPLEX ALGOIRTHM " << cnt << endl;
     }
     return x[x1];
 }

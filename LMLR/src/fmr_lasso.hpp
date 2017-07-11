@@ -48,11 +48,13 @@ public:
     double obj;
     mat beta_old;
     mat beta;
+    const mat beta_str;
     mat resid;
     vec lambda;
     vec alpha;
     vec sig_2;
     vec pi;
+    vec pi_brent;
     double mean;
     double stdev;
     double inner;
@@ -74,14 +76,10 @@ public:
     // Main coordinate descent method
     mat FMRLassoRun(const mat& geno,
                     const mat& pheno,
-                    double sig1,
-                    double sig2,
-                    double mu_1,
-                    double mu_2,
-                    double pi_1,
-                    double pi_2,
-                    double lambda_in_1,
-                    double lambda_in_2,
+                    vec sigs,
+                    vec mus,
+                    vec pis,
+                    vec lambdas,
                     unsigned int maxit,
                     unsigned int mode,
                     const mat& beta_str,
@@ -95,14 +93,11 @@ public:
     void ActiveSet(mat& est, mat& est_ind, int* no_not_active);
     double BICRun(const mat& geno,
                   const mat& pheno,
-                  double sig_1,
-                  double sig_2,
-                  double mu_1,
-                  double mu_2,
-                  double pi_1,
-                  double pi_2,
-                  double lambda_in_1,
-                  double lambda_in_2,
+                  const mat& beta_str,
+                  vec sigs,
+                  vec mus,
+                  vec pis,
+                  vec lambdas,
                   double dists,
                   unsigned int maxit,
                   int verbose,
@@ -113,14 +108,11 @@ public:
                            int iterations,
                            const mat& geno,
                            const mat& pheno,
-                           double sig_1,
-                           double sig_2,
-                           double mu_1,
-                           double mu_2,
-                           double pi_1,
-                           double pi_2,
-                           double lambda_in_1,
-                           double lambda_in_2,
+                           const mat& beta_update,
+                           vec sigs,
+                           vec mus,
+                           vec pis,
+                           vec lambdas,
                            double dists,
                            unsigned int maxit,
                            int verbose,

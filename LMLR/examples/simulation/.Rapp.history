@@ -1,0 +1,104 @@
+x <- read.table("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_x.csv")
+x <- read.csv("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_x.csv")
+y <- read.csv("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_y.csv")
+dim(x)
+x <- read.csv("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_x.csv", header = F)
+y <- read.csv("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_y.csv", header = F)
+x <- read.csv("~/Dropbox/Git_Repos/LMLR/examples/simulation/sim_x.csv", header = F)
+dim(y)
+dim(X)
+dim(x)
+asd <- lm(y~x)
+asd <- lm(y[, 1]~x)
+asd <- lm(y[, 1]~as.matrix(x))
+xs <- summary(asd)
+xs$coefs
+coefficients(xs)
+coefficients(xs)[, 1]
+coefficients(xs)[-1, 1]
+beta.2 <- cbind(coefficients(xs)[-1, 1], coefficients(xs)[-1, 1])
+setwd('~/Dropbox/Git_Repos/LMLR/examples/simulation/test_data_gen.R', chdir = TRUE)
+setwd('~/Dropbox/Git_Repos/LMLR/examples/simulation/test_data_gen.R')
+setwd('~/Dropbox/Git_Repos/LMLR/examples/simulation/')
+ext      <- ""
+sim.name <- "sim_1_"
+source('fmr_data_gen_csv4.R', chdir = F)
+ext      <- ""#
+sim.name <- "sim_1_"#
+for (i in seq(1, 1))#
+{#
+  sim.name.i <- paste0(ext, sim.name, i)#
+  n = 200#
+  p = 100#
+  sd = 1#
+  mu <- c(-20, 20)#
+  g  <- 2#
+  pis <- c(0.4, 0.6)#
+  # Beta vector#
+  beta.1 <- c(2, -1, 2)#
+  beta.2 <- c(-2, 2, -1)#
+  beta.tru   <- matrix(0, nrow = p, ncol = g)#
+  beta.tru[1:length(beta.1), 1]  <- beta.1#
+  beta.tru[(length(beta.1) + 2):(length(beta.1) + 1 + length(beta.2)), 2]  <- beta.2#
+  # Simulate the name#
+  FMRDataGen4Csv(n, p, "", sim.name.i, sd, mu, g, pis, beta.tru)#
+  beta <- matrix(0, nrow = p, ncol = g)#
+  beta <- beta + 0.1#
+  betas.out <- paste0("out/betas_str_", i, ".txt")#
+  write.table(beta, betas.out, col.names = F, row.names = F, sep = ",")#
+}
+ext      <- ""#
+sim.name <- "sim"#
+for (i in seq(1, 1))#
+{#
+  sim.name.i <- paste0(ext, sim.name, i)#
+  n = 200#
+  p = 100#
+  sd = 1#
+  mu <- c(-20, 20)#
+  g  <- 2#
+  pis <- c(0.4, 0.6)#
+  # Beta vector#
+  beta.1 <- c(2, -1, 2)#
+  beta.2 <- c(-2, 2, -1)#
+  beta.tru   <- matrix(0, nrow = p, ncol = g)#
+  beta.tru[1:length(beta.1), 1]  <- beta.1#
+  beta.tru[(length(beta.1) + 2):(length(beta.1) + 1 + length(beta.2)), 2]  <- beta.2#
+  # Simulate the name#
+  FMRDataGen4Csv(n, p, "", sim.name.i, sd, mu, g, pis, beta.tru)#
+  beta <- matrix(0, nrow = p, ncol = g)#
+  beta <- beta + 0.1#
+  betas.out <- paste0("betas_str_", i, ".txt")#
+  write.table(beta, betas.out, col.names = F, row.names = F, sep = ",")#
+}
+rm(list = ls())#
+setwd("")#
+source('fmr_data_gen_csv4.R', chdir = F)#
+# ---------------------------------------#
+# Simulation 1#
+# ---------------------------------------#
+ext      <- ""#
+sim.name <- "sim"#
+for (i in seq(1, 1))#
+{#
+  sim.name.i <- paste0(ext, sim.name, i)#
+  n = 200#
+  p = 20#
+  sd = 1#
+  mu <- c(-20, 20)#
+  g  <- 2#
+  pis <- c(0.4, 0.6)#
+  # Beta vector#
+  beta.1 <- c(2, -1, 2)#
+  beta.2 <- c(-2, 2, -1)#
+  beta.tru   <- matrix(0, nrow = p, ncol = g)#
+  beta.tru[1:length(beta.1), 1]  <- beta.1#
+  beta.tru[(length(beta.1) + 2):(length(beta.1) + 1 + length(beta.2)), 2]  <- beta.2#
+  # Simulate the name#
+  FMRDataGen4Csv(n, p, "", sim.name.i, sd, mu, g, pis, beta.tru)#
+  beta <- matrix(0, nrow = p, ncol = g)#
+  beta <- beta + 0.1#
+  betas.out <- paste0("betas_str_", i, ".txt")#
+  write.table(beta, betas.out, col.names = F, row.names = F, sep = ",")#
+}
+beta.tru

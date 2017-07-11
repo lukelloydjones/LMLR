@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------
 // Author: Luke Lloyd-Jones
 // Date started:   13/06/2015
-// Date last updated: 22/02/2016
+// Date last updated: 10/06/2016
 // ---------------------------------------------------------------------
 
 // Includes
@@ -52,16 +52,6 @@ using namespace boost::math;
 int main(int argc, char* argv[])
 {
     // ----------------------------------------------------------
-    // Print the header
-    // ----------------------------------------------------------
-    cout << "          +--------------------------------------------------+" << endl;
-    cout << "          |                                                  |" << endl;
-    cout << "          | LMLR, v1.0                                       |" << endl;
-    cout << "          | (C) 2016 Luke Lloyd-Jones and Hien Nguyen        |" << endl;
-    cout << "          | GNU General Public License v3                    |" << endl;
-    cout << "          |                                                  |" << endl;
-    cout << "          +--------------------------------------------------+" << endl;
-    // ----------------------------------------------------------
     // Print the arguments that have been passed
     // ----------------------------------------------------------
     std::cout << "Number of command line arguments " << argc << "\n";
@@ -78,15 +68,23 @@ int main(int argc, char* argv[])
     double con_crit    = atof(argv[5]);
     double maxit       = atoi(argv[6]);
     double pterb       = atof(argv[7]);
-    double sig_1       = atof(argv[8]);
-    double sig_2       = atof(argv[9]);
-    double mu_1        = atof(argv[10]);
-    double mu_2        = atof(argv[11]);
-    double pi_1        = atof(argv[12]);
-    double pi_2        = atof(argv[13]);
-    static const std::string outpath  = argv[14];
-    unsigned int dists = 2;
-    // cout << "lasso value is " << lasso << endl;
+    static const std::string outpath  = argv[8];
+    static const std::string beta_str_in  = argv[9];
+    unsigned int dists = (argc - 9) / 3;
+    cout << "Number of dists " << dists << " seconds" << endl;
+    // Fill the initial vectors for the mus, pis, and sigs
+    vec sig_srt(dists);
+    vec mu_srt(dists);
+    vec pi_srt(dists);
+    for (unsigned int i = 0; i < dists; i++)
+    {
+        sig_srt(i) = atof(argv[(10 + i)]);
+        mu_srt(i)  = atof(argv[(10 + dists + i)]);
+        pi_srt(i)  = atof(argv[(10 + 2 * dists + i)]);
+    }
+//     cout << "sig start " << sig_srt << endl;
+//     cout << "mu  start " << mu_srt << endl;
+//     cout << "pi  start " << pi_srt << endl;
     clock_t t1, t2, t3, t4;
     // ----------------------------------------------------------
     // Reading data in .csv format to eliminate possible data
@@ -102,6 +100,12 @@ int main(int argc, char* argv[])
     float seconds1 = diff1 / CLOCKS_PER_SEC;
     cout << "File input took " << seconds1 << " seconds" << endl;
     // ----------------------------------------------------------
+    // Load up the starting betas
+    // ----------------------------------------------------------
+    mat beta_str(X.n_cols, dists, fill::ones);
+    // Initiate betas by a read in from the outpath
+    beta_str.load(beta_str_in, csv_ascii);
+    // ----------------------------------------------------------
     // Declare an instance of the class
     // ----------------------------------------------------------
     t3 = clock();
@@ -109,7 +113,6 @@ int main(int argc, char* argv[])
     // -------------------------------------------------------------
     // Golden search over the lasso paramter
     // -------------------------------------------------------------
-    cout << "INITIALISING GOLDEN SECTION SEARCH ALGORITHM" << endl;
     const double golden_ratio = 2 / (sqrt(5) + 1);
     //double lb = gs_str(1);
     //double ub = gs_str(0);
@@ -123,8 +126,15 @@ int main(int argc, char* argv[])
     double x1 = ub - golden_ratio * (ub - lb);
     double x2 = lb + golden_ratio * (ub - lb);
     // Evaluate the function at these test points
-    f1 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, x1, x1, dists, maxit, 0, outpath);
-    f2 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, x2, x2, dists, maxit, 0, outpath);
+    vec lambdas_str_1(dists);
+    vec lambdas_str_2(dists);
+    for (unsigned int i = 0; i < dists; i++)
+    {
+        lambdas_str_1(i) = x1;
+        lambdas_str_2(i) = x2;
+    }
+    f1 = l1.BICRun(X, Y, beta_str, sig_srt, mu_srt, pi_srt, lambdas_str_1, dists, maxit, 1, outpath);
+    f2 = l1.BICRun(X, Y, beta_str, sig_srt, mu_srt, pi_srt, lambdas_str_2, dists, maxit, 1, outpath);
     cout << "BIC at initial end points " << x1 << "," << f1 << " " << x2 << "," << f2 << endl;
     // Use golden search to find best lambda
     while (abs(ub - lb) > tolerance)
@@ -139,7 +149,11 @@ int main(int argc, char* argv[])
             x2 = x1;
             f2 = f1;
             x1 = ub - golden_ratio * (ub - lb);
-            f1 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, x1, x1, dists, maxit, 0, outpath);
+            for (unsigned int i = 0; i < dists; i++)
+            {
+                lambdas_str_1(i) = x1;
+            }
+            f1 = l1.BICRun(X, Y, beta_str, sig_srt, mu_srt, pi_srt, lambdas_str_1, dists, maxit, 0, outpath);
         }
         else
         {
@@ -148,16 +162,35 @@ int main(int argc, char* argv[])
             x1 = x2;
             f1 = f2;
             x2 = lb + golden_ratio * (ub - lb);
-            f2 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, x2, x2, dists, maxit, 0, outpath);
+            for (unsigned int i = 0; i < dists; i++)
+            {
+                lambdas_str_2(i) = x2;
+            }
+            f2 = l1.BICRun(X, Y, beta_str, sig_srt, mu_srt, pi_srt, lambdas_str_2, dists, maxit, 0, outpath);
         }
-        cout << "Bounds at iteration "     << iteration << " are (" << lb << "," << ub << ")" << endl;
+        cout << "Bounds at iteration "       << iteration << " are (" << lb << "," << ub << ")" << endl;
         cout << "BIC bounds at iteration "   << iteration << " are (" << f1 << "," << f2 << ")" << endl;
     }
     double gs_min;
     gs_min = (ub + lb) / 2;
     cout << "Estimate of minimum Golden search lambda 1 " << gs_min << endl;
     double min_bic1 = 0.0;
-    min_bic1 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, gs_min, gs_min, dists, maxit, 0, outpath);
+    vec lambdas_min(dists);
+    for (unsigned int i = 0; i < dists; i++)
+    {
+        lambdas_min(i) = gs_min;
+    }
+    min_bic1 = l1.BICRun(X, Y, beta_str, sig_srt, mu_srt, pi_srt, lambdas_min, dists, maxit, 1, outpath);
+    // ---------------------------------------------------------------------------
+    // Update the betas so we are not starting from the a bad position for simplex
+    // ---------------------------------------------------------------------------
+    mat beta_update;
+    int no_active = X.n_cols * dists;
+    mat est_ind(X.n_cols, dists, fill::zeros);
+    beta_update = l1.FMRLassoRun(X, Y, sig_srt, mu_srt, pi_srt,
+                                 lambdas_min, maxit, 0, beta_str, est_ind,
+                                 &min_bic1, no_active, 0, outpath);
+    // cout << "What's at beta " << beta_update << endl;
     cout << "Minimum Golden search BIC " << min_bic1 << endl;
     cout << "Estimate of minimum Golden search lambda " << gs_min << endl;
     // ------------------------------------------------------------------------------
@@ -165,17 +198,28 @@ int main(int argc, char* argv[])
     // ------------------------------------------------------------------------------
     vector<double> simpl_res;
     vector<double> init;
-    init.push_back(gs_min - 0.5);
-    init.push_back(gs_min + 0.5);
-    simpl_res = l1.Simplex(init, 1E-3, 50, X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, lasso_b1, lasso_b2,
+    int a = 1;
+    double arnd = 0.0;
+    for (unsigned int i = 0; i < dists; i++)
+    {
+        a = a * -1 ;
+        arnd = (gs_min + 0.5 * a);
+        init.push_back(arnd);
+    }
+    simpl_res = l1.Simplex(init, 1E-3, 100, X, Y, beta_update, sig_srt, mu_srt, pi_srt, lambdas_min,
                            dists, maxit, 0, outpath);
     // ------------------------------------------------------------------------------
     // Run final set with this lambda and report
     // ------------------------------------------------------------------------------
     double min_bic2;
-    min_bic2 = l1.BICRun(X, Y, sig_1, sig_2, mu_1, mu_2, pi_1, pi_2, simpl_res.at(0), simpl_res.at(1), dists, maxit, 1, outpath);
+    vec simpl_res_arma(dists);
+    for (unsigned int i = 0; i < dists; i++)
+    {
+        simpl_res_arma(i) = simpl_res.at(i);
+    }
+    min_bic2 = l1.BICRun(X, Y, beta_update, sig_srt, mu_srt, pi_srt, simpl_res_arma, dists, maxit, 1, outpath);
     cout << "Minimum simplex BIC " << min_bic2 << endl;
-    cout << "Best simplex lambda vector is (" << simpl_res.at(0) << ", " << simpl_res.at(1) << ")" << endl;
+    cout << "Best simplex lambda vector is " << simpl_res_arma << endl;
     // ------------------------------------------------------------------------------
     // Print out the time to estimate parameters
     // ------------------------------------------------------------------------------
