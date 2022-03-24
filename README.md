@@ -1,5 +1,5 @@
 # Implementation of Lasso Mixture of Linear Regressions model in C++
-# -------------------------------------------------------------
+# -------------------------------------------------
 
 This repository contains an implementation of the methodology outlined in Luke R. Lloyd-Jones, 
 Hien D. Nguyen, Geoffrey J. McLachlan. "A globally convergent algorithm for lasso-penalized 
